@@ -17,7 +17,7 @@ import org.volifecycle.lifecycle.LifeCycleManager;
 
 import volifecycle.ui.bean.LifeCycleContainer;
 import volifecycle.ui.bean.LifeCycleContainerJson;
-import volifecycle.ui.vo.HandlerDataServlet;
+import volifecycle.ui.handler.HandlerServlet;
 import volifecycle.ui.vo.LifeCycle;
 
 /**
@@ -56,10 +56,10 @@ public class GenerateJsonLifeCycleServlet extends HttpServlet {
     @Override
     protected final void doGet(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
 
-        HandlerDataServlet handler = new HandlerDataServlet();
+        HandlerServlet handler = new HandlerServlet();
         ObjectMapper mapper = new ObjectMapper();
         LifeCycle lifeCycle = new LifeCycle();
-        LifeCycleContainerJson lifeCycleJson = new LifeCycleContainerJson();
+        LifeCycleContainerJson lifeCycleManagerListToJson = new LifeCycleContainerJson();
 
         @SuppressWarnings("rawtypes")
         List<LifeCycleManager> lifecycleManagerList = new ArrayList<LifeCycleManager>();
@@ -74,13 +74,18 @@ public class GenerateJsonLifeCycleServlet extends HttpServlet {
         lifecycleManagerList = managerContainerList.getManagerList();
 
         handler.init();
-        lifeCycleJson = handler.getManagerListAttrs(lifecycleManagerList);
 
+        // Get list of all managers from a manager container xml file
+        lifeCycleManagerListToJson = handler.getManagerListAttrs(lifecycleManagerList);
+
+        // display list of all manager in a json format on the browser
         if (req.getParameter("action") != null) {
             if (req.getParameter("action").equals("showList")) {
-                out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(lifeCycleJson));
+                out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(lifeCycleManagerListToJson));
             }
         }
+
+        // display lifecycle content in json format on the browser
         if (req.getParameter("idManagerLifeCycle") != null) {
             int idManagerLifeCycle = Integer.parseInt(req.getParameter("idManagerLifeCycle"));
 

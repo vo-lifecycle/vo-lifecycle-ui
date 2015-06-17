@@ -1,4 +1,4 @@
-package volifecycle.ui.vo;
+package volifecycle.ui.handler;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -14,17 +14,20 @@ import org.volifecycle.lifecycle.LifeCycleAction;
 import org.volifecycle.lifecycle.LifeCycleAdapter;
 import org.volifecycle.lifecycle.LifeCycleManager;
 import org.volifecycle.lifecycle.LifeCycleState;
-import org.volifecycle.lifecycle.impl.LifeCycleSimpleActionImpl;
 import org.volifecycle.lifecycle.impl.LifeCycleTransitionImpl;
 
 import volifecycle.ui.bean.LifeCycleContainerJson;
 import volifecycle.ui.bean.LifeCycleContainerLight;
+import volifecycle.ui.vo.LifeCycle;
+import volifecycle.ui.vo.SimpleAction;
+import volifecycle.ui.vo.State;
+import volifecycle.ui.vo.Transition;
 
 /**
  * @author anthony attia <anthony.attia1@gmail.com>
  *
  */
-public class HandlerDataServlet implements Serializable {
+public class HandlerServlet implements Serializable {
 
     /**
      * default servialVersionUID.
@@ -32,22 +35,22 @@ public class HandlerDataServlet implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * init a new sate.
+     * declare a new sate.
      */
     private State state;
 
     /**
-     * init a new sateList.
+     * declare a new sateList.
      */
     private List<State> stateList;
 
     /**
-     * init a new checkList.
+     * declare a new checkList.
      */
     private List<String> targetStates;
 
     /**
-     * init a new transitionList
+     * declare a new transitionList.
      */
     private Map<String, Transition> transitionList;
 
@@ -57,31 +60,32 @@ public class HandlerDataServlet implements Serializable {
     private LifeCycle lifeCycle;
 
     /**
-     * init a new transition.
+     * declare a new transition.
      */
     private Transition<?> transition;
 
     /**
-     * init list of managers
+     * declare list of managers.
      */
 
     private LifeCycleContainerJson listManager;
 
+    /**
+     * declare list of actions.
+     */
     private List<LifeCycleAction<?>> listAction;
 
+    /**
+     * declare list of simpleAction.
+     */
     private List<SimpleAction> simpleAction;
 
-    private Mapper mapper = new DozerBeanMapper();
-
     /**
-     * init datas.
+     * declare datas.
      */
     public final void init() {
 
-        stateList = new ArrayList<State>();
         transitionList = new HashMap<String, Transition>();
-        lifeCycle = new LifeCycle();
-        listManager = new LifeCycleContainerJson();
 
     }
 
@@ -92,6 +96,9 @@ public class HandlerDataServlet implements Serializable {
      * @return
      */
     public final LifeCycleContainerJson getManagerListAttrs(List<LifeCycleManager> lifecycleManagerList) {
+        Mapper mapper = new DozerBeanMapper();
+
+        listManager = new LifeCycleContainerJson();
 
         LifeCycleContainerLight lifeCycleLight = null;
         List<LifeCycleContainerLight> containerManagerList = new ArrayList<LifeCycleContainerLight>();
@@ -103,20 +110,22 @@ public class HandlerDataServlet implements Serializable {
         }
 
         listManager.setList(containerManagerList);
+
         return listManager;
     }
 
     /**
-     * Return an object which contains all data about vo lifecycle graph,
-     * including each actions for each transitions and each transition for each
-     * actions
      * 
-     * @param bean
+     * Take a manager of a lifecycle and return an object which contains all
+     * datas about a vo lifecycle graph , including each actions for each
+     * transitions and each transition for each actions.
+     * 
+     * @param manager
      *            .
      */
-    public final LifeCycle getLifeCycleInformations(final LifeCycleManager<?, LifeCycleAdapter<?>> bean) {
+    public final LifeCycle getLifeCycleInformations(final LifeCycleManager<?, LifeCycleAdapter<?>> manager) {
 
-        Map<String, ?> statesById = bean.getStatesById();
+        Map<String, ?> statesById = manager.getStatesById();
         Set<String> keys = statesById.keySet();
 
         Iterator<String> it = keys.iterator();
@@ -124,9 +133,10 @@ public class HandlerDataServlet implements Serializable {
         Iterator<String> itTransition = null;
         Map<String, ?> transitionsById = null;
         LifeCycleTransitionImpl<?> infosTransition = null;
-        List<?> checker = null;
 
         String key;
+        stateList = new ArrayList<State>();
+        lifeCycle = new LifeCycle();
 
         while (it.hasNext()) {
             state = new State();
@@ -156,24 +166,27 @@ public class HandlerDataServlet implements Serializable {
                     targetStates = new ArrayList<String>();
                     listAction = new ArrayList<LifeCycleAction<?>>();
                     simpleAction = new ArrayList<SimpleAction>();
-                    for (String targetStatesL : infosTransition.getTargetStates()) {
-                        if (targetStatesL != null)
-                            targetStates.add(targetStatesL);
 
+                    if (null != infosTransition.getTargetStates()) {
+                        for (String targetStatesL : infosTransition.getTargetStates()) {
+                            if (targetStatesL != null) {
+                                targetStates.add(targetStatesL);
+                            }
+
+                        }
                     }
-                    // for (LifeCycleAction<?> action :
-                    // infosTransition.getActions()) {
-                    // if (action != null)
-                    // listAction.add(action);
-                    // }
-                    for (Object action : infosTransition.getActions()) {
-                        SimpleAction act = new SimpleAction();
-                        LifeCycleAction<?> cycleAction = (LifeCycleAction<?>) action;
 
-                        act.setId(cycleAction.getId());
-                        act.setDescription(cycleAction.getDescription());
-                        if (action != null)
-                            simpleAction.add(act);
+                    if (null != infosTransition.getActions()) {
+                        for (Object action : infosTransition.getActions()) {
+                            SimpleAction act = new SimpleAction();
+                            LifeCycleAction<?> cycleAction = (LifeCycleAction<?>) action;
+
+                            act.setId(cycleAction.getId());
+                            act.setDescription(cycleAction.getDescription());
+                            if (action != null) {
+                                simpleAction.add(act);
+                            }
+                        }
                     }
 
                     transition.setType(infosTransition.getType());
