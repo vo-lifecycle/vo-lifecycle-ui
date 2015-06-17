@@ -58,6 +58,7 @@ public class HandlerServletTest {
         ListAction = new ArrayList<LifeCycleAction<?>>();
         targetList = new ArrayList<String>();
         lifeCycle = new LifeCycle();
+        handler.init();
         setData();
 
     }
