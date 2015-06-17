@@ -5,6 +5,7 @@ import java.util.List;
 import org.volifecycle.lifecycle.LifeCycleManager;
 
 /**
+ * Object container wich contains all lifecycle managers
  * 
  * @author an anthony attia <anthony.attia1@gmail.com>
  *
@@ -24,7 +25,7 @@ public class LifeCycleContainer {
      * @param managerList
      *            the managerList to set
      */
-    public void setManagerList(List<LifeCycleManager> managerList) {
+    public void setManagerList(final List<LifeCycleManager> managerList) {
         this.managerList = managerList;
     }
 
