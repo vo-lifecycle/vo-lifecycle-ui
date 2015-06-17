@@ -11,6 +11,7 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
+import volifecycle.ui.vo.SimpleAction;
 import volifecycle.ui.vo.State;
 import volifecycle.ui.vo.Transition;
 
@@ -29,11 +30,14 @@ public class LifeCycleManagerTest {
     private Transition transition;
     private Transition transition2;
 
+    private SimpleAction simpleAction;
+
     private Map<String, Transition> transitionListState1;
     private Map<String, Transition> transitionListState2;
     private Map<String, Transition> transitionListState3;
 
     private List<State> listState;
+    private List<SimpleAction> simpleActionList;
 
     @Before
     public final void initData() {
@@ -45,10 +49,13 @@ public class LifeCycleManagerTest {
         transition = new Transition();
         transition2 = new Transition();
 
+        simpleAction = new SimpleAction();
+
         transitionListState1 = new HashMap<String, Transition>();
         transitionListState2 = new HashMap<String, Transition>();
         transitionListState3 = new HashMap<String, Transition>();
         listState = new ArrayList<State>();
+        simpleActionList = new ArrayList<SimpleAction>();
 
         setData();
     }
@@ -67,6 +74,14 @@ public class LifeCycleManagerTest {
 
         assertNotNull("null okay", state3.getTransitionMap());
         assertEquals(1, state3.getTransitionMap().size());
+
+        assertNotNull("null okay", transition.getActions().get(0));
+        for (Object act : transition.getActions()) {
+
+            assertEquals("id action", simpleAction.getId());
+            assertEquals("description action", simpleAction.getDescription());
+        }
+        System.out.println(transition.getActions().get(0).toString());
 
     }
 
@@ -110,8 +125,13 @@ public class LifeCycleManagerTest {
 
         state3.setTransitionMap(transitionListState3.values());
 
-    }
+        simpleAction.setDescription("description action");
+        simpleAction.setId("id action");
+        simpleActionList.add(simpleAction);
 
+        transition.setActions(simpleActionList);
+
+    }
 }
 
 // public void Test
