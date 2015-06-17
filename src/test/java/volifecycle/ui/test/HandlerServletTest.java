@@ -19,6 +19,7 @@ import org.volifecycle.lifecycle.impl.LifeCycleManagerImpl;
 import org.volifecycle.lifecycle.impl.LifeCycleStateImpl;
 import org.volifecycle.lifecycle.impl.LifeCycleTransitionImpl;
 
+import volifecycle.ui.bean.LifeCycleContainer;
 import volifecycle.ui.bean.LifeCycleContainerJson;
 import volifecycle.ui.handler.HandlerServlet;
 import volifecycle.ui.vo.LifeCycle;
@@ -42,6 +43,7 @@ public class HandlerServletTest {
     private List<String> targetList;
     private LifeCycle lifeCycle;
     private HandlerServlet handler;
+    private LifeCycleContainer containerManager;
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Before
@@ -58,6 +60,7 @@ public class HandlerServletTest {
         ListAction = new ArrayList<LifeCycleAction<?>>();
         targetList = new ArrayList<String>();
         lifeCycle = new LifeCycle();
+        containerManager = new LifeCycleContainer();
 
         handler.init();
         setData();
@@ -88,7 +91,10 @@ public class HandlerServletTest {
 
         listManagerToJson = handler.getManagerListAttrs(lifecycleManagerList);
 
+        containerManager.setManagerList(lifecycleManagerList);
+
         assertEquals(1, listManagerToJson.getList().size());
+        assertEquals(1, containerManager.getManagerList().size());
 
     }
 
