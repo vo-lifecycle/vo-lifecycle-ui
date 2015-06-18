@@ -151,17 +151,15 @@ public class HandlerServlet implements Serializable {
             state.setId(key);
             state.setDescription(getStateList.getDescription());
 
+            lifeCycle.setStateListCycle(stateList);
+            stateList.add(state);
+
             Set<String> keysTransition = (null == getStateList.getTransitionsById()) ? null : getStateList.getTransitionsById().keySet();
             if (isEmpty(keysTransition)) {
                 continue;
             }
 
             itTransition = keysTransition.iterator();
-
-            lifeCycle.setStateListCycle(stateList);
-
-            stateList.add(state);
-
             while (itTransition.hasNext()) {
 
                 key = itTransition.next();
