@@ -1,5 +1,7 @@
 package volifecycle.ui.handler;
 
+import static org.apache.commons.collections.CollectionUtils.isEmpty;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -149,7 +151,11 @@ public class HandlerServlet implements Serializable {
             state.setId(key);
             state.setDescription(getStateList.getDescription());
 
-            Set<String> keysTransition = getStateList.getTransitionsById().keySet();
+            Set<String> keysTransition = (null == getStateList.getTransitionsById()) ? null : getStateList.getTransitionsById().keySet();
+            if (isEmpty(keysTransition)) {
+                continue;
+            }
+
             itTransition = keysTransition.iterator();
 
             lifeCycle.setStateListCycle(stateList);
