@@ -5,7 +5,8 @@
  */
 $(function() {
 
-	var url = "http://localhost:8080/mas-cmd/GenerateJsonLifeCycleServlet?action=showList" ;
+	//Get Json format lifecycle datas from an other servlet  
+	var url = getContextPath()+"/GenerateJsonLifeCycleServlet?action=showList" ;
 	var globalGraph;
 	var graph = null;
 	$.ajax(url, {
@@ -23,7 +24,7 @@ $(function() {
 				})
 
 			}else{
-				console.log("data is null");
+				console.debug("data is null");
 			}
 
 		},
@@ -32,7 +33,7 @@ $(function() {
 		}
 	})
 
-
+	//Generate graph corresponding to the lifeCycle choosed
 	$("#submitForm").submit(function(event) {
 		//$("paper").empty();
 
@@ -40,7 +41,7 @@ $(function() {
 		$("#paper").html('');	
 		console.debug("test");
 
-		var url = "http://localhost:8080/mas-cmd/GenerateJsonLifeCycleServlet?idManagerLifeCycle=" + selectValue ;
+		var url = getContextPath()+"/GenerateJsonLifeCycleServlet?idManagerLifeCycle=" + selectValue ;
 		$.ajax(url, {
 			type: 'GET', // it's easier to read GET request parameters
 			dataType: 'json',
@@ -58,10 +59,10 @@ $(function() {
 					}
 					createState(data.state);
 					createTransition(data.state);
-					showGraph();
+					getCookie();
 
 				}else{
-					console.log("data is null");
+					console.debug("data is null");
 				}
 
 			},
@@ -77,7 +78,7 @@ $(function() {
 		
 		var i = 0;
 		i++;
-		console.log(i);
+		console.debug(i);
 		event.preventDefault();
 
 		
@@ -159,29 +160,18 @@ $(function() {
 			+'<text></text>'
 			+'<span></span><br/>'
 			+'</div>';
-			//console.log(arrayChecker);
+			//console.debug(arrayChecker);
 			var elementTransition = createElementTransition(html,label,x,y);
 			return elementTransition;
 
 		}
 
-//		function createElementTransition (contentHtml,label){
-//			var element = new joint.shapes.html.Element({ 
-//				position: { x: Math.random() * (500)  + 1, y: Math.random() * (500)  + 1 }, 
-//				label: label, 
-//				size: { width: 170, height: 28 }, 
-//				"width" : 170,
-//				"height" : 28,
-//				content:  contentHtml
-//
-//			});
-//			return element;
-//		}
+
 		//** create transition element with an html template **//
 		function createElementTransition (contentHtml,label,x,y){
 
 			var idt = label + x;
-			console.log(idt);
+			console.debug(idt);
 
 			var element = new joint.shapes.html.Element({ 
 				label: label, 
@@ -197,8 +187,8 @@ $(function() {
 			if(getPosition != null){
 				for(var pos in getPosition){
 					if (getPosition[pos].element == element.id){
-						console.log("element id = " + element.id + "sa position x = " + getPosition[pos].left);
-						console.log("element id = " + element.id + "sa position y = " +getPosition[pos].top);
+						console.debug("element id = " + element.id + "sa position x = " + getPosition[pos].left);
+						console.debug("element id = " + element.id + "sa position y = " +getPosition[pos].top);
 
 
 						element.get('position').x = getPosition[pos].left;
@@ -255,7 +245,7 @@ $(function() {
 				var getCookiePosition = JSON.parse(localStorage.getItem($('#lifeCycle option:selected').text()));  
 				if(getCookiePosition == null){    
 					createElement(s.id,xs + 100 ,ys);
-					console.log("cookie does not exist yet");
+					console.debug("cookie does not exist yet");
 				}else{
 					for(var pos in getCookiePosition){
 						if(s.id == getCookiePosition[pos].element )
@@ -277,7 +267,7 @@ $(function() {
 
 						createLinkById(state.id,transition.id);
 						trans.targetStates.forEach(function(element,index){
-							console.log(element);
+							console.debug(element);
 							createLinkById(transition.id, element);
 							
 						})
@@ -289,18 +279,18 @@ $(function() {
 			});
 		}
 	});
-	function showGraph(){
-		console.log(globalGraph);
+	function getCookie(){
+		console.debug(globalGraph);
 		var i;
 
-		console.log("local storage");
+		console.debug("local storage");
 		for (i = 0; i < localStorage.length; i++)   {
-		    console.log(localStorage.key(i) + "=[" + localStorage.getItem(localStorage.key(i)) + "]");
+		    console.debug(localStorage.key(i) + "=[" + localStorage.getItem(localStorage.key(i)) + "]");
 		}
 
-		console.log("session storage");
+		console.debug("session storage");
 		for (i = 0; i < sessionStorage.length; i++) {
-		    console.log(sessionStorage.key(i) + "=[" + sessionStorage.getItem(sessionStorage.key(i)) + "]");
+		    console.debug(sessionStorage.key(i) + "=[" + sessionStorage.getItem(sessionStorage.key(i)) + "]");
 		}
 	}
 	//*** cookie **//
@@ -382,10 +372,14 @@ $(function() {
 
 			}else{
 
-				console.log("j exise pas ! ");
+				console.debug("j exise pas ! ");
 			}
 		}
 
 
 	});
+	function getContextPath() {
+		
+		   return window.location.pathname.substring(0, window.location.pathname.indexOf("/",2));
+	}
 });
