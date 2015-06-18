@@ -304,7 +304,7 @@ $(function() {
 
   
     //*** cookie **//
-    //get positions of all elements of graph
+    //** get positions of all elements of graph **//
     $("#record").click(function() {
 
         console.debug("record in progress");
@@ -345,7 +345,7 @@ $(function() {
     });
 
 
-    // Set a new localStorage and store positions of joint js generated elements
+    //** Set a new localStorage and store positions of joint js generated elements **// 
     function setLocalStorage(position) {
 
         var cposition = $('#lifeCycle option:selected').text();
@@ -353,14 +353,14 @@ $(function() {
         //console.debug(JSON.stringify(position));
     }
 
-    //display localstorage content postions
+    //** display localstorage content postions **//
     function getLocalStorage() {
 
         var getPosition = JSON.parse(localStorage.getItem($('#lifeCycle option:selected').text()));
         
     }
     
-    //Display localStorage stored in cache
+    //** Display localStorage stored in cache **//
     function getCookie() {
         
         var i;
@@ -372,8 +372,15 @@ $(function() {
 
         
     }
+    
+    $("#delete").click(function(){
+    	localStorage.removeItem($('#lifeCycle option:selected').text());
+    	$("#model-text").text("Position supprimée pour le cycle de vie  : " + $('#lifeCycle option:selected').text());
+    	console.log("delete localstorage : " + $('#lifeCycle option:selected').text());
+    	
+    });
 
-    //Return context path
+    //** Return context path **//
     function getContextPath() {
 
         return window.location.pathname.substring(0, window.location.pathname.indexOf("/", 2));
