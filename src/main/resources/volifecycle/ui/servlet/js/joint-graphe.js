@@ -72,9 +72,7 @@ $(function() {
         globalGraph = graph;
 
 
-        var i = 0;
-        i++;
-        console.debug(i);
+       
         event.preventDefault();
 
 
@@ -268,7 +266,7 @@ $(function() {
 
                 var getCookiePosition = JSON.parse(localStorage.getItem($('#lifeCycle option:selected').text()));
                 if (getCookiePosition == null) {
-                    createElement(s.id, xs + 100, ys);
+                    createElement(s.id, xs + 100, ys + 100);
                     console.debug("cookie does not exist yet");
                 } else {
                     for (var pos in getCookiePosition) {
