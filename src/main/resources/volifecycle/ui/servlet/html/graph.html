@@ -1,55 +1,84 @@
 <!DOCTYPE html>
 <!-- @author anthony attia <anthony.attia1@gmail.com -->
 <html>
-	<head>
-		<meta charset=ISO-8859-1>
-		<title>LifeCycle ui</title>
-	
-	
-		 <meta name="viewport" content="width=device-width, initial-scale=1">
-		 <script src= "?resources=joint.all.min&ext=js"></script>
-		
-		 <link rel="stylesheet" type="text/css" href="?resources=joint&ext=css" />
-		 <link rel="stylesheet" type="text/css" href="?resources=joint-html&ext=css" />
-		 <link rel="stylesheet" type="text/css" href="?resources=bootstrap.min&ext=css" />
-		 
-		 <script type="text/javascript" src="?resources=jquery-2.1.3.min&ext=js"></script>
-		 <script type="text/javascript" src="?resources=bootstrap.min&ext=js"></script>
-		 <script type="text/javascript" src="?resources=joint&ext=js"></script>
-		 
-		 <script type="text/javascript" src="?resources=joint-graphe&ext=js"></script>
-		
-		 <script type="text/javascript" src="?resources=joint-shapes&ext=js"></script>
-		 <script type="text/javascript" src="?resources=joint-shapes-uml&ext=js"></script>  
-	</head>
+<head>
+<meta charset=ISO-8859-1>
+<title>LifeCycle ui</title>
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="?resources=joint.all.min&ext=js"></script>
+
+<link rel="stylesheet" type="text/css" href="?resources=joint&ext=css" />
+<link rel="stylesheet" type="text/css"
+	href="?resources=joint-html&ext=css" />
+<link rel="stylesheet" type="text/css"
+	href="?resources=bootstrap.min&ext=css" />
+
+<script type="text/javascript" src="?resources=jquery-2.1.3.min&ext=js"></script>
+<script type="text/javascript" src="?resources=bootstrap.min&ext=js"></script>
+<script type="text/javascript" src="?resources=joint&ext=js"></script>
+
+<script type="text/javascript" src="?resources=joint-graphe&ext=js"></script>
+
+<script type="text/javascript" src="?resources=joint-shapes&ext=js"></script>
+<script type="text/javascript" src="?resources=joint-shapes-uml&ext=js"></script>
+</head>
 <body>
-	   
+
 
 	<div class="container">
-		
+
 		<div class="row">
-			
+
 			<div class="col-lg-6 col-md-6 col-xs-6">
-				
+
 				<form id="submitForm" action="">
 					<div class="form-group">
-						 <label for="lifeCycle"> Selectionnez un cycle de vie  </label>  
-						 <select id="lifeCycle" class="form-control"> 
-						 </select>  
+						<label for="lifeCycle"> Selectionnez un cycle de vie </label> <select
+							id="lifeCycle" class="form-control">
+						</select>
 					</div>
-					 <button type="submit" class="btn btn-success">Afficher</button>
-					 <button type="submit" id="record" class="btn btn-danger">Enregistrer  Position</button>
+					<button type="submit" class="btn btn-success">Afficher</button><br /><br />
+					<button type="button" id="record" class="btn btn-primary ">Enregistrer
+						Position</button>
+					<button type="button" id="delete" class="btn btn-danger "
+						data-toggle="modal" data-target="#myModal">Supprimmer
+						Position</button>
 				</form>
 				<br />
-				
+
 				<!-- <button type="submit" id="find" class="btn btn-danger">Retrouver  Position</button> -->
-				
+
 			</div>
-			
+
 		</div>
-		
-	</div><br />
+
+	</div>
+	<br />
 	<div id="paper" class="paper"></div>
+
+
+	<!-- Modal -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel">Modal title</h4>
+				</div>
+				<div class="modal-body"><p id= "model-text"> </p></div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					
+				</div>
+			</div>
+		</div>
+	</div>
 
 
 </body>
