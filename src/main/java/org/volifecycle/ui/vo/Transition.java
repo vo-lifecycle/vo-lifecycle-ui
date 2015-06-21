@@ -3,8 +3,6 @@ package org.volifecycle.ui.vo;
 import java.io.Serializable;
 import java.util.List;
 
-import org.volifecycle.lifecycle.LifeCycleActionStorage;
-
 /**
  * 
  * @author an anthony attia <anthony.attia1@gmail.com>
@@ -23,11 +21,6 @@ public class Transition<T> implements Serializable {
 	 * List of composite actions.
 	 */
 	private List<SimpleAction> actions;
-
-	/**
-	 * Action storage.
-	 */
-	private LifeCycleActionStorage<T> actionStorage;
 
 	/**
      * 
@@ -107,21 +100,6 @@ public class Transition<T> implements Serializable {
 	 */
 	public void setActions(List<SimpleAction> listAction) {
 		this.actions = listAction;
-	}
-
-	/**
-	 * @return the actionStorage
-	 */
-	public LifeCycleActionStorage<T> getActionStorage() {
-		return actionStorage;
-	}
-
-	/**
-	 * @param actionStorage
-	 *            the actionStorage to set
-	 */
-	public void setActionStorage(LifeCycleActionStorage<T> actionStorage) {
-		this.actionStorage = actionStorage;
 	}
 
 	/**
