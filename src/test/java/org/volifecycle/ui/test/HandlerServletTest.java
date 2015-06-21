@@ -11,6 +11,7 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 import org.volifecycle.lifecycle.LifeCycleAction;
+import org.volifecycle.lifecycle.LifeCycleAdapter;
 import org.volifecycle.lifecycle.LifeCycleManager;
 import org.volifecycle.lifecycle.LifeCycleState;
 import org.volifecycle.lifecycle.LifeCycleTransition;
@@ -30,106 +31,39 @@ import org.volifecycle.ui.vo.Transition;
  * @author attia anthony <anthony.attia1@gmail.com>
  *
  */
-public class HandlerServletTest {
+public class HandlerServletTest<T, A extends LifeCycleAdapter<T>> {
 
-	private LifeCycleManagerImpl manager;
-	private Map<String, LifeCycleState<?>> statesById;
-	private Map<String, LifeCycleTransition<?>> transitionsById;
-	private LifeCycleStateImpl state;
-	private LifeCycleTransitionImpl transition;
-	private LifeCycleCompositeActionImpl action;
-	private List<LifeCycleAction<?>> listAction;
+	private LifeCycleManagerImpl<T, A> manager;
+	private Map<String, LifeCycleState<T>> statesById;
+	private Map<String, LifeCycleTransition<T>> transitionsById;
+	private LifeCycleStateImpl<T> state;
+	private LifeCycleTransitionImpl<T> transition;
+	private LifeCycleCompositeActionImpl<T> action;
+	private List<LifeCycleAction<T>> listAction;
 	private List<String> targetList;
 	private LifeCycle lifeCycle;
 	private HandlerServlet handler;
 	private LifeCycleContainer containerManager;
 
+	/**
+	 * Init datas
+	 */
 	@Before
 	public final void initData() {
 		handler = new HandlerServlet();
-		manager = new LifeCycleManagerImpl();
-		statesById = new HashMap<String, LifeCycleState<?>>();
-		transitionsById = new HashMap<String, LifeCycleTransition<?>>();
-		state = new LifeCycleStateImpl();
-		transition = new LifeCycleTransitionImpl();
-		action = new LifeCycleCompositeActionImpl();
-		listAction = new ArrayList<LifeCycleAction<?>>();
+		manager = new LifeCycleManagerImpl<T, A>();
+		statesById = new HashMap<String, LifeCycleState<T>>();
+		transitionsById = new HashMap<String, LifeCycleTransition<T>>();
+		state = new LifeCycleStateImpl<T>();
+		transition = new LifeCycleTransitionImpl<T>();
+		action = new LifeCycleCompositeActionImpl<T>();
+		listAction = new ArrayList<LifeCycleAction<T>>();
 		targetList = new ArrayList<String>();
 		lifeCycle = new LifeCycle();
 		containerManager = new LifeCycleContainer();
 		handler.init();
-		initDatas();
-	}
 
-	/**
-	 * Test if function getManagerListAttrs return list of managers
-	 */
-	@Test
-	public void getManagerListAttrsTest() {
-
-		HandlerServlet handler = new HandlerServlet();
-		Map<String, Object> statesById = new HashMap<String, Object>();
-		LifeCycleManagerImpl cmanager = new LifeCycleManagerImpl();
-
-		cmanager.setDescription("description manager test");
-		cmanager.setId("id manager test");
-		statesById.put("state", "id");
-
-		// System.out.println(cmanager.getDescription() + cmanager.getId());
-
-		List<LifeCycleManager<?, ?>> lifecycleManagerList = new ArrayList<LifeCycleManager<?, ?>>();
-		lifecycleManagerList.add(cmanager);
-
-		LifeCycleContainerJson listManagerToJson = new LifeCycleContainerJson();
-
-		listManagerToJson = handler.getManagerListAttrs(lifecycleManagerList);
-
-		containerManager.setManagerList(lifecycleManagerList);
-
-		assertEquals(1, listManagerToJson.getList().size());
-		assertEquals(1, containerManager.getManagerList().size());
-
-	}
-
-	/**
-	 * Create a new manager and check if a lifecycle is correctly returned with
-	 * its manager datas
-	 */
-	@Test
-	public void getLifeCycleInformationsTest() {
-
-		lifeCycle = handler.getLifeCycleInformations(manager);
-
-		assertEquals(1, lifeCycle.getState().get(0).getTransitionMap().size());
-		assertEquals("state test", lifeCycle.getState().get(0).getDescription());
-
-		assertNotNull("null okay", lifeCycle.getState().get(0).getTransitionMap());
-
-		for (State statel : lifeCycle.getState()) {
-			for (Transition trans : statel.getTransitionMap()) {
-				assertEquals(1, trans.getActions().size());
-				assertEquals("transition description", trans.getDescription());
-				assertEquals("id transition", trans.getIdTransition());
-
-				if (null != trans.getActions()) {
-					for (Object obj : transition.getActions()) {
-
-						LifeCycleAction<?> cycleAction = (LifeCycleAction<?>) obj;
-
-						assertEquals("id action", cycleAction.getId());
-					}
-				}
-			}
-
-		}
-		assertEquals(1, lifeCycle.getState().size());
-
-	}
-
-	/**
-	 * Init datas
-	 */
-	public void initDatas() {
+		// Init datas
 		state.setDescription("state test");
 		state.setId("id test");
 
@@ -154,10 +88,65 @@ public class HandlerServletTest {
 		state.setTransitionsById(transitionsById);
 		statesById.put("s", state);
 
-		// manager.s
-		// Map<String, ?> map = new HashMap<String, ?>();
-
 		manager.setStatesById(statesById);
 	}
 
+	/**
+	 * Test if function getManagerListAttrs return list of managers
+	 */
+	@Test
+	public void getManagerListAttrsTest() {
+
+		HandlerServlet handler = new HandlerServlet();
+		Map<String, Object> statesById = new HashMap<String, Object>();
+		LifeCycleManagerImpl<T, A> cmanager = new LifeCycleManagerImpl<T, A>();
+
+		cmanager.setDescription("description manager test");
+		cmanager.setId("id manager test");
+		statesById.put("state", "id");
+
+		List<LifeCycleManager<?, ?>> lifecycleManagerList = new ArrayList<LifeCycleManager<?, ?>>();
+		lifecycleManagerList.add(cmanager);
+
+		LifeCycleContainerJson listManagerToJson = new LifeCycleContainerJson();
+
+		listManagerToJson = handler.getManagerListAttrs(lifecycleManagerList);
+
+		containerManager.setManagerList(lifecycleManagerList);
+
+		assertEquals(1, listManagerToJson.getList().size());
+		assertEquals(1, containerManager.getManagerList().size());
+
+	}
+
+	/**
+	 * Create a new manager and check if a lifecycle is correctly returned with
+	 * its manager datas
+	 */
+	@Test
+	public void getLifeCycleInformationsTest() {
+		lifeCycle = handler.getLifeCycleInformations(manager);
+
+		assertEquals(1, lifeCycle.getState().get(0).getTransitionMap().size());
+		assertEquals("state test", lifeCycle.getState().get(0).getDescription());
+		assertNotNull("null okay", lifeCycle.getState().get(0).getTransitionMap());
+
+		for (State statel : lifeCycle.getState()) {
+			for (Transition trans : statel.getTransitionMap()) {
+				assertEquals(1, trans.getActions().size());
+				assertEquals("transition description", trans.getDescription());
+				assertEquals("id transition", trans.getIdTransition());
+
+				if (null != trans.getActions()) {
+					for (Object obj : transition.getActions()) {
+						LifeCycleAction<?> cycleAction = (LifeCycleAction<?>) obj;
+						assertEquals("id action", cycleAction.getId());
+					}
+				}
+			}
+
+		}
+
+		assertEquals(1, lifeCycle.getState().size());
+	}
 }
