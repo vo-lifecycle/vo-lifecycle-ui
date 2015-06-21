@@ -11,22 +11,21 @@ import org.volifecycle.lifecycle.LifeCycleManager;
  *
  */
 public class LifeCycleContainer {
+	private List<LifeCycleManager<?, ?>> managerList;
 
-    private List<LifeCycleManager> managerList;
+	/**
+	 * @return the managerList
+	 */
+	public List<LifeCycleManager<?, ?>> getManagerList() {
+		return managerList;
+	}
 
-    /**
-     * @return the managerList
-     */
-    public List<LifeCycleManager> getManagerList() {
-        return managerList;
-    }
-
-    /**
-     * @param managerList
-     *            the managerList to set
-     */
-    public void setManagerList(final List<LifeCycleManager> managerList) {
-        this.managerList = managerList;
-    }
+	/**
+	 * @param managerList
+	 *            the managerList to set
+	 */
+	public void setManagerList(final List<LifeCycleManager<?, ?>> managerList) {
+		this.managerList = managerList;
+	}
 
 }

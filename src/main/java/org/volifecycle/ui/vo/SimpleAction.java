@@ -1,7 +1,6 @@
 package org.volifecycle.ui.vo;
 
 import java.io.Serializable;
-import java.util.Map;
 
 /**
  * Simple action representation.
@@ -21,8 +20,6 @@ public class SimpleAction implements Serializable {
 	 * description.
 	 */
 	private String description;
-
-	private Map<String, String> additionnalInformations;
 
 	/**
 	 * @return the id.
@@ -53,27 +50,4 @@ public class SimpleAction implements Serializable {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-	/**
-	 * @return the additionnalInformations
-	 */
-	public Map<String, String> getAdditionnalInformations() {
-		return additionnalInformations;
-	}
-
-	/**
-	 * @param additionnalInformations
-	 *            the additionnalInformations to set
-	 */
-	public void setAdditionnalInformations(Map<String, String> additionnalInformations) {
-		this.additionnalInformations = additionnalInformations;
-	}
-
-	/**
-	 * @return the serialversionuid
-	 */
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-
 }

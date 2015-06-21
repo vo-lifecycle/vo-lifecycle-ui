@@ -3,17 +3,13 @@ package org.volifecycle.ui.vo;
 import java.io.Serializable;
 import java.util.List;
 
-import org.volifecycle.lifecycle.LifeCycleActionStorage;
-
 /**
+ * Transition representation class.
  * 
  * @author an anthony attia <anthony.attia1@gmail.com>
- * @param <T>
- * @param <T>
- *            value object type
  *
  */
-public class Transition<T> implements Serializable {
+public class Transition implements Serializable {
 	/**
 	 * Id of a transition
 	 */
@@ -23,11 +19,6 @@ public class Transition<T> implements Serializable {
 	 * List of composite actions.
 	 */
 	private List<SimpleAction> actions;
-
-	/**
-	 * Action storage.
-	 */
-	private LifeCycleActionStorage<T> actionStorage;
 
 	/**
      * 
@@ -110,21 +101,6 @@ public class Transition<T> implements Serializable {
 	}
 
 	/**
-	 * @return the actionStorage
-	 */
-	public LifeCycleActionStorage<T> getActionStorage() {
-		return actionStorage;
-	}
-
-	/**
-	 * @param actionStorage
-	 *            the actionStorage to set
-	 */
-	public void setActionStorage(LifeCycleActionStorage<T> actionStorage) {
-		this.actionStorage = actionStorage;
-	}
-
-	/**
 	 * @return the description
 	 */
 	public String getDescription() {
@@ -152,12 +128,5 @@ public class Transition<T> implements Serializable {
 	 */
 	public void setTargetStates(List<String> targetStates) {
 		this.targetStates = targetStates;
-	}
-
-	/**
-	 * @return the serialversionuid
-	 */
-	public static long getSerialversionuid() {
-		return serialVersionUID;
 	}
 }
