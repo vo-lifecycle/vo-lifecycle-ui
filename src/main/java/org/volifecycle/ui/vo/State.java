@@ -28,13 +28,6 @@ public class State implements Serializable {
 	private Collection<Transition> transitionMap;
 
 	/**
-	 * @return the serialversionuid
-	 */
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-
-	/**
 	 * @return the id
 	 */
 	public String getId() {

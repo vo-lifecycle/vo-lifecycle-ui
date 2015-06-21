@@ -4,11 +4,9 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
+ * Transition representation class.
  * 
  * @author an anthony attia <anthony.attia1@gmail.com>
- * @param <T>
- * @param <T>
- *            value object type
  *
  */
 public class Transition implements Serializable {
@@ -130,12 +128,5 @@ public class Transition implements Serializable {
 	 */
 	public void setTargetStates(List<String> targetStates) {
 		this.targetStates = targetStates;
-	}
-
-	/**
-	 * @return the serialversionuid
-	 */
-	public static long getSerialversionuid() {
-		return serialVersionUID;
 	}
 }

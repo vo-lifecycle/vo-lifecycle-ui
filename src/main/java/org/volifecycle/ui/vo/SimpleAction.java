@@ -50,11 +50,4 @@ public class SimpleAction implements Serializable {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-	/**
-	 * @return the serialversionuid
-	 */
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
 }
