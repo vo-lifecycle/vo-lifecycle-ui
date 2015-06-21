@@ -38,38 +38,32 @@ public class HandlerServletTest {
 	private LifeCycleStateImpl state;
 	private LifeCycleTransitionImpl transition;
 	private LifeCycleCompositeActionImpl action;
-	private List<LifeCycleAction<?>> ListAction;
+	private List<LifeCycleAction<?>> listAction;
 	private List<String> targetList;
 	private LifeCycle lifeCycle;
 	private HandlerServlet handler;
 	private LifeCycleContainer containerManager;
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Before
 	public final void initData() {
-
 		handler = new HandlerServlet();
-
 		manager = new LifeCycleManagerImpl();
 		statesById = new HashMap<String, LifeCycleState<?>>();
 		transitionsById = new HashMap<String, LifeCycleTransition<?>>();
 		state = new LifeCycleStateImpl();
 		transition = new LifeCycleTransitionImpl();
 		action = new LifeCycleCompositeActionImpl();
-		ListAction = new ArrayList<LifeCycleAction<?>>();
+		listAction = new ArrayList<LifeCycleAction<?>>();
 		targetList = new ArrayList<String>();
 		lifeCycle = new LifeCycle();
 		containerManager = new LifeCycleContainer();
-
 		handler.init();
-		setData();
-
+		initDatas();
 	}
 
 	/**
 	 * Test if function getManagerListAttrs return list of managers
 	 */
-	@SuppressWarnings("rawtypes")
 	@Test
 	public void getManagerListAttrsTest() {
 
@@ -101,7 +95,6 @@ public class HandlerServletTest {
 	 * Create a new manager and check if a lifecycle is correctly returned with
 	 * its manager datas
 	 */
-	@SuppressWarnings("rawtypes")
 	@Test
 	public void getLifeCycleInformationsTest() {
 
@@ -133,8 +126,10 @@ public class HandlerServletTest {
 
 	}
 
-	public void setData() {
-
+	/**
+	 * Init datas
+	 */
+	public void initDatas() {
 		state.setDescription("state test");
 		state.setId("id test");
 
@@ -150,9 +145,9 @@ public class HandlerServletTest {
 		transition.setType("type transition");
 		transition.setTargetStates(targetList);
 
-		ListAction.add(action);
+		listAction.add(action);
 
-		transition.setActions(ListAction);
+		transition.setActions(listAction);
 
 		transitionsById.put("", transition);
 
