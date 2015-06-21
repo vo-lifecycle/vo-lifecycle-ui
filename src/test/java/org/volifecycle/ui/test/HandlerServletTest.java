@@ -32,137 +32,137 @@ import org.volifecycle.ui.vo.Transition;
  */
 public class HandlerServletTest {
 
-    private LifeCycleManagerImpl manager;
-    private Map<String, LifeCycleState<?>> statesById;
-    private Map<String, LifeCycleTransition<?>> transitionsById;
-    private LifeCycleStateImpl state;
-    private LifeCycleTransitionImpl transition;
-    private LifeCycleCompositeActionImpl action;
-    private List<LifeCycleAction<?>> ListAction;
-    private List<String> targetList;
-    private LifeCycle lifeCycle;
-    private HandlerServlet handler;
-    private LifeCycleContainer containerManager;
+	private LifeCycleManagerImpl manager;
+	private Map<String, LifeCycleState<?>> statesById;
+	private Map<String, LifeCycleTransition<?>> transitionsById;
+	private LifeCycleStateImpl state;
+	private LifeCycleTransitionImpl transition;
+	private LifeCycleCompositeActionImpl action;
+	private List<LifeCycleAction<?>> ListAction;
+	private List<String> targetList;
+	private LifeCycle lifeCycle;
+	private HandlerServlet handler;
+	private LifeCycleContainer containerManager;
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    @Before
-    public final void initData() {
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Before
+	public final void initData() {
 
-        handler = new HandlerServlet();
+		handler = new HandlerServlet();
 
-        manager = new LifeCycleManagerImpl();
-        statesById = new HashMap<String, LifeCycleState<?>>();
-        transitionsById = new HashMap<String, LifeCycleTransition<?>>();
-        state = new LifeCycleStateImpl();
-        transition = new LifeCycleTransitionImpl();
-        action = new LifeCycleCompositeActionImpl();
-        ListAction = new ArrayList<LifeCycleAction<?>>();
-        targetList = new ArrayList<String>();
-        lifeCycle = new LifeCycle();
-        containerManager = new LifeCycleContainer();
+		manager = new LifeCycleManagerImpl();
+		statesById = new HashMap<String, LifeCycleState<?>>();
+		transitionsById = new HashMap<String, LifeCycleTransition<?>>();
+		state = new LifeCycleStateImpl();
+		transition = new LifeCycleTransitionImpl();
+		action = new LifeCycleCompositeActionImpl();
+		ListAction = new ArrayList<LifeCycleAction<?>>();
+		targetList = new ArrayList<String>();
+		lifeCycle = new LifeCycle();
+		containerManager = new LifeCycleContainer();
 
-        handler.init();
-        setData();
+		handler.init();
+		setData();
 
-    }
+	}
 
-    /**
-     * Test if function getManagerListAttrs return list of managers
-     */
-    @SuppressWarnings("rawtypes")
-    @Test
-    public void getManagerListAttrsTest() {
+	/**
+	 * Test if function getManagerListAttrs return list of managers
+	 */
+	@SuppressWarnings("rawtypes")
+	@Test
+	public void getManagerListAttrsTest() {
 
-        HandlerServlet handler = new HandlerServlet();
-        Map<String, Object> statesById = new HashMap<String, Object>();
-        LifeCycleManagerImpl cmanager = new LifeCycleManagerImpl();
+		HandlerServlet handler = new HandlerServlet();
+		Map<String, Object> statesById = new HashMap<String, Object>();
+		LifeCycleManagerImpl cmanager = new LifeCycleManagerImpl();
 
-        cmanager.setDescription("description manager test");
-        cmanager.setId("id manager test");
-        statesById.put("state", "id");
+		cmanager.setDescription("description manager test");
+		cmanager.setId("id manager test");
+		statesById.put("state", "id");
 
-        // System.out.println(cmanager.getDescription() + cmanager.getId());
+		// System.out.println(cmanager.getDescription() + cmanager.getId());
 
-        List<LifeCycleManager> lifecycleManagerList = new ArrayList<LifeCycleManager>();
-        lifecycleManagerList.add(cmanager);
+		List<LifeCycleManager<?, ?>> lifecycleManagerList = new ArrayList<LifeCycleManager<?, ?>>();
+		lifecycleManagerList.add(cmanager);
 
-        LifeCycleContainerJson listManagerToJson = new LifeCycleContainerJson();
+		LifeCycleContainerJson listManagerToJson = new LifeCycleContainerJson();
 
-        listManagerToJson = handler.getManagerListAttrs(lifecycleManagerList);
+		listManagerToJson = handler.getManagerListAttrs(lifecycleManagerList);
 
-        containerManager.setManagerList(lifecycleManagerList);
+		containerManager.setManagerList(lifecycleManagerList);
 
-        assertEquals(1, listManagerToJson.getList().size());
-        assertEquals(1, containerManager.getManagerList().size());
+		assertEquals(1, listManagerToJson.getList().size());
+		assertEquals(1, containerManager.getManagerList().size());
 
-    }
+	}
 
-    /**
-     * Create a new manager and check if a lifecycle is correctly returned with
-     * its manager datas
-     */
-    @SuppressWarnings("rawtypes")
-    @Test
-    public void getLifeCycleInformationsTest() {
+	/**
+	 * Create a new manager and check if a lifecycle is correctly returned with
+	 * its manager datas
+	 */
+	@SuppressWarnings("rawtypes")
+	@Test
+	public void getLifeCycleInformationsTest() {
 
-        lifeCycle = handler.getLifeCycleInformations(manager);
+		lifeCycle = handler.getLifeCycleInformations(manager);
 
-        assertEquals(1, lifeCycle.getState().get(0).getTransitionMap().size());
-        assertEquals("state test", lifeCycle.getState().get(0).getDescription());
+		assertEquals(1, lifeCycle.getState().get(0).getTransitionMap().size());
+		assertEquals("state test", lifeCycle.getState().get(0).getDescription());
 
-        assertNotNull("null okay", lifeCycle.getState().get(0).getTransitionMap());
+		assertNotNull("null okay", lifeCycle.getState().get(0).getTransitionMap());
 
-        for (State statel : lifeCycle.getState()) {
-            for (Transition trans : statel.getTransitionMap()) {
-                assertEquals(1, trans.getActions().size());
-                assertEquals("transition description", trans.getDescription());
-                assertEquals("id transition", trans.getIdTransition());
+		for (State statel : lifeCycle.getState()) {
+			for (Transition trans : statel.getTransitionMap()) {
+				assertEquals(1, trans.getActions().size());
+				assertEquals("transition description", trans.getDescription());
+				assertEquals("id transition", trans.getIdTransition());
 
-                if (null != trans.getActions()) {
-                    for (Object obj : transition.getActions()) {
+				if (null != trans.getActions()) {
+					for (Object obj : transition.getActions()) {
 
-                        LifeCycleAction<?> cycleAction = (LifeCycleAction<?>) obj;
+						LifeCycleAction<?> cycleAction = (LifeCycleAction<?>) obj;
 
-                        assertEquals("id action", cycleAction.getId());
-                    }
-                }
-            }
+						assertEquals("id action", cycleAction.getId());
+					}
+				}
+			}
 
-        }
-        assertEquals(1, lifeCycle.getState().size());
+		}
+		assertEquals(1, lifeCycle.getState().size());
 
-    }
+	}
 
-    public void setData() {
+	public void setData() {
 
-        state.setDescription("state test");
-        state.setId("id test");
+		state.setDescription("state test");
+		state.setId("id test");
 
-        targetList.add("State 1");
-        targetList.add("State 2");
-        targetList.add("State 3");
+		targetList.add("State 1");
+		targetList.add("State 2");
+		targetList.add("State 3");
 
-        action.setId("id action");
-        action.setDescription("description action");
+		action.setId("id action");
+		action.setDescription("description action");
 
-        transition.setDescription("transition description");
-        transition.setId("id transition");
-        transition.setType("type transition");
-        transition.setTargetStates(targetList);
+		transition.setDescription("transition description");
+		transition.setId("id transition");
+		transition.setType("type transition");
+		transition.setTargetStates(targetList);
 
-        ListAction.add(action);
+		ListAction.add(action);
 
-        transition.setActions(ListAction);
+		transition.setActions(ListAction);
 
-        transitionsById.put("", transition);
+		transitionsById.put("", transition);
 
-        state.setTransitionsById(transitionsById);
-        statesById.put("s", state);
+		state.setTransitionsById(transitionsById);
+		statesById.put("s", state);
 
-        // manager.s
-        // Map<String, ?> map = new HashMap<String, ?>();
+		// manager.s
+		// Map<String, ?> map = new HashMap<String, ?>();
 
-        manager.setStatesById(statesById);
-    }
+		manager.setStatesById(statesById);
+	}
 
 }

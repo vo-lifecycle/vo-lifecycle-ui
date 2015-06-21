@@ -13,7 +13,6 @@ import java.util.Set;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 import org.volifecycle.lifecycle.LifeCycleAction;
-import org.volifecycle.lifecycle.LifeCycleAdapter;
 import org.volifecycle.lifecycle.LifeCycleManager;
 import org.volifecycle.lifecycle.LifeCycleState;
 import org.volifecycle.lifecycle.impl.LifeCycleTransitionImpl;
@@ -72,11 +71,6 @@ public class HandlerServlet implements Serializable {
 	private LifeCycleContainerJson listManager;
 
 	/**
-	 * declare list of actions.
-	 */
-	private List<LifeCycleAction<?>> listAction;
-
-	/**
 	 * declare list of simpleAction.
 	 */
 	private List<SimpleAction> simpleAction;
@@ -96,7 +90,7 @@ public class HandlerServlet implements Serializable {
 	 * @param lifecycleManagerList
 	 * @return
 	 */
-	public final LifeCycleContainerJson getManagerListAttrs(List<LifeCycleManager> lifecycleManagerList) {
+	public final LifeCycleContainerJson getManagerListAttrs(List<LifeCycleManager<?, ?>> lifecycleManagerList) {
 		Mapper mapper = new DozerBeanMapper();
 
 		listManager = new LifeCycleContainerJson();
@@ -104,7 +98,7 @@ public class HandlerServlet implements Serializable {
 		LifeCycleContainerLight lifeCycleLight = null;
 		List<LifeCycleContainerLight> containerManagerList = new ArrayList<LifeCycleContainerLight>();
 
-		for (LifeCycleManager<?, LifeCycleAdapter<?>> manager : lifecycleManagerList) {
+		for (LifeCycleManager<?, ?> manager : lifecycleManagerList) {
 			lifeCycleLight = mapper.map(manager, LifeCycleContainerLight.class);
 			containerManagerList.add(lifeCycleLight);
 
@@ -124,7 +118,7 @@ public class HandlerServlet implements Serializable {
 	 * @param manager
 	 *            .
 	 */
-	public final LifeCycle getLifeCycleInformations(final LifeCycleManager<?, LifeCycleAdapter<?>> manager) {
+	public final LifeCycle getLifeCycleInformations(final LifeCycleManager<?, ?> manager) {
 
 		Map<String, ?> statesById = manager.getStatesById();
 		Set<String> keys = statesById.keySet();
@@ -167,7 +161,6 @@ public class HandlerServlet implements Serializable {
 					transition = new Transition();
 					infosTransition = (LifeCycleTransitionImpl<?>) transitionsById.get(key);
 					targetStates = new ArrayList<String>();
-					listAction = new ArrayList<LifeCycleAction<?>>();
 					simpleAction = new ArrayList<SimpleAction>();
 
 					if (null != infosTransition.getTargetStates()) {

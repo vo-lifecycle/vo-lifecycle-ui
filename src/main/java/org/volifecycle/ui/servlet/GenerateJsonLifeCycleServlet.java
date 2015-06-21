@@ -62,13 +62,12 @@ public class GenerateJsonLifeCycleServlet extends HttpServlet {
 	 * @throws JsonGenerationException
 	 * @throws JsonMappingException
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void generateJSON(final HttpServletRequest req, final HttpServletResponse resp) throws IOException, JsonGenerationException, JsonMappingException {
 		HandlerServlet handler = new HandlerServlet();
 		ObjectMapper mapper = new ObjectMapper();
 		LifeCycle lifeCycle = new LifeCycle();
 		LifeCycleContainerJson lifeCycleManagerListToJson = new LifeCycleContainerJson();
-		List<LifeCycleManager> lifecycleManagerList = new ArrayList<LifeCycleManager>();
+		List<LifeCycleManager<?, ?>> lifecycleManagerList = new ArrayList<LifeCycleManager<?, ?>>();
 
 		resp.setContentType("application/json");
 		PrintWriter out = resp.getWriter();
