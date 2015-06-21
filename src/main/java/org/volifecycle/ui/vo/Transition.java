@@ -11,7 +11,7 @@ import java.util.List;
  *            value object type
  *
  */
-public class Transition<T> implements Serializable {
+public class Transition implements Serializable {
 	/**
 	 * Id of a transition
 	 */
