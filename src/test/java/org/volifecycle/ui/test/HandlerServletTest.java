@@ -1,4 +1,4 @@
-package volifecycle.ui.test;
+package org.volifecycle.ui.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -18,13 +18,12 @@ import org.volifecycle.lifecycle.impl.LifeCycleCompositeActionImpl;
 import org.volifecycle.lifecycle.impl.LifeCycleManagerImpl;
 import org.volifecycle.lifecycle.impl.LifeCycleStateImpl;
 import org.volifecycle.lifecycle.impl.LifeCycleTransitionImpl;
-
-import volifecycle.ui.bean.LifeCycleContainer;
-import volifecycle.ui.bean.LifeCycleContainerJson;
-import volifecycle.ui.handler.HandlerServlet;
-import volifecycle.ui.vo.LifeCycle;
-import volifecycle.ui.vo.State;
-import volifecycle.ui.vo.Transition;
+import org.volifecycle.ui.bean.LifeCycleContainer;
+import org.volifecycle.ui.bean.LifeCycleContainerJson;
+import org.volifecycle.ui.handler.HandlerServlet;
+import org.volifecycle.ui.vo.LifeCycle;
+import org.volifecycle.ui.vo.State;
+import org.volifecycle.ui.vo.Transition;
 
 /**
  * 

@@ -1,4 +1,4 @@
-package volifecycle.ui.bean;
+package org.volifecycle.ui.bean;
 
 import java.util.List;
 
