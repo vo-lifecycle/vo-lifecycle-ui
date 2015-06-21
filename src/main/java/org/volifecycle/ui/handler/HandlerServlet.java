@@ -1,4 +1,4 @@
-package volifecycle.ui.handler;
+package org.volifecycle.ui.handler;
 
 import static org.apache.commons.collections.CollectionUtils.isEmpty;
 
@@ -17,13 +17,12 @@ import org.volifecycle.lifecycle.LifeCycleAdapter;
 import org.volifecycle.lifecycle.LifeCycleManager;
 import org.volifecycle.lifecycle.LifeCycleState;
 import org.volifecycle.lifecycle.impl.LifeCycleTransitionImpl;
-
-import volifecycle.ui.bean.LifeCycleContainerJson;
-import volifecycle.ui.bean.LifeCycleContainerLight;
-import volifecycle.ui.vo.LifeCycle;
-import volifecycle.ui.vo.SimpleAction;
-import volifecycle.ui.vo.State;
-import volifecycle.ui.vo.Transition;
+import org.volifecycle.ui.bean.LifeCycleContainerJson;
+import org.volifecycle.ui.bean.LifeCycleContainerLight;
+import org.volifecycle.ui.vo.LifeCycle;
+import org.volifecycle.ui.vo.SimpleAction;
+import org.volifecycle.ui.vo.State;
+import org.volifecycle.ui.vo.Transition;
 
 /**
  * @author anthony attia <anthony.attia1@gmail.com>

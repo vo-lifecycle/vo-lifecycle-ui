@@ -1,4 +1,4 @@
-package volifecycle.ui.test;
+package org.volifecycle.ui.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -10,10 +10,9 @@ import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import volifecycle.ui.vo.SimpleAction;
-import volifecycle.ui.vo.State;
-import volifecycle.ui.vo.Transition;
+import org.volifecycle.ui.vo.SimpleAction;
+import org.volifecycle.ui.vo.State;
+import org.volifecycle.ui.vo.Transition;
 
 /**
  * class test for a default manager with defaults values
