@@ -19,7 +19,7 @@
 <script type="text/javascript" src="?resources=bootstrap.min&ext=js"></script>
 <script type="text/javascript" src="?resources=joint&ext=js"></script>
 
-<script type="text/javascript" src="?resources=joint-graphe&ext=js"></script>
+
 
 <script type="text/javascript" src="?resources=joint-shapes&ext=js"></script>
 <script type="text/javascript" src="?resources=joint-shapes-uml&ext=js"></script>
@@ -28,30 +28,26 @@
 
 
 	<div class="container">
-
 		<div class="row">
-
 			<div class="col-lg-6 col-md-6 col-xs-6">
 
 				<form id="submitForm" action="">
 					<div class="form-group">
-						<label for="lifeCycle"> Selectionnez un cycle de vie </label> <select
-							id="lifeCycle" class="form-control">
+						<label for="lifeCycle"> Select an life cycle </label> 
+						<select id="lifeCycle" class="form-control">
 						</select>
 					</div>
-					<button type="submit" class="btn btn-success">Afficher</button><br /><br />
-					<button type="button" id="record" class="btn btn-primary ">Enregistrer
-						Position</button>
-					<button type="button" id="delete" class="btn btn-danger "
-						data-toggle="modal" data-target="#myModal">Supprimmer
-						Position</button>
+					<noscript><button type="submit" class="btn btn-success">Afficher</button>
+					</noscript>
+					<!-- <button type="submit" id="record" class="btn btn-primary ">Enregistrer
+						Position</button> -->
+					
 				</form>
 				<br />
 
 				<!-- <button type="submit" id="find" class="btn btn-danger">Retrouver  Position</button> -->
 
 			</div>
-
 		</div>
 
 	</div>
@@ -59,27 +55,8 @@
 	<div id="paper" class="paper"></div>
 
 
-	<!-- Modal -->
-	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
-		aria-labelledby="myModalLabel">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-					<h4 class="modal-title" id="myModalLabel">Modal title</h4>
-				</div>
-				<div class="modal-body"><p id= "model-text"> </p></div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					
-				</div>
-			</div>
-		</div>
-	</div>
-
+	
+<script type="text/javascript" src="?resources=joint-graphe&ext=js"></script>
 
 </body>
 </html>
