@@ -18,6 +18,8 @@ $(function() {
 	var idCollapse = 0;
 	var x = 0;
 	var y = 0;
+	
+	var positionJ;
 
 
 	$.ajax(url, {
@@ -26,7 +28,7 @@ $(function() {
 		async: true,
 		success: function(data) {
 			if (data != null) {
-				console.debug(data.length);
+				//console.debug(data.length);
 				data.list.forEach(function(status, index) {
 					$("#lifeCycle").append($('<option>', {
 						value: index,
@@ -216,8 +218,8 @@ $(function() {
 		if (getPosition != null) {
 			for (var pos in getPosition) {
 				if (getPosition[pos].element == element.id) {
-					console.debug("element id = " + element.id + "sa position x = " + getPosition[pos].left);
-					console.debug("element id = " + element.id + "sa position y = " + getPosition[pos].top);
+					//console.debug("element id = " + element.id + "sa position x = " + getPosition[pos].left);
+					//console.debug("element id = " + element.id + "sa position y = " + getPosition[pos].top);
 
 
 					element.get('position').x = getPosition[pos].left;
@@ -293,11 +295,15 @@ $(function() {
 	 *  */
 	
 	function createState(states) {
+		
+		var compteur = getNbStates(states);
+		console.log(compteur)
+		
 		states.forEach(function(s, ide) {
 
 			var getCookiePosition = JSON.parse(localStorage.getItem($('#lifeCycle option:selected').text()));
 			
-			if (getCookiePosition == null) {
+			if (getCookiePosition == null || compteur != states.length) {
 				createElement(s.id,  Math.random() * (500) + 1,  Math.random() * (500) + 1);
 				console.debug("cookie does not exist yet");
 			} else {
@@ -308,6 +314,10 @@ $(function() {
 			}
 		});
 	}
+	
+	/**
+	 * 
+	 */
 
 	function createTransition(states) {
 		states.forEach(function(state, ide) {
@@ -321,7 +331,7 @@ $(function() {
 
 					createLinkById(state.id, transition.id);
 					trans.targetStates.forEach(function(element, index) {
-						console.debug(element);
+						//console.debug(element);
 						createLinkById(transition.id, element);
 
 					})
@@ -342,7 +352,7 @@ $(function() {
 
 		var cposition = $('#lifeCycle option:selected').text();
 		localStorage.setItem(cposition, JSON.stringify(position));
-		console.debug(JSON.stringify(position));
+		//console.debug(JSON.stringify(position));
 	}
 
 	/**
@@ -374,7 +384,7 @@ $(function() {
 	$("#delete").click(function(){
 		localStorage.removeItem($('#lifeCycle option:selected').text());
 		$("#model-text").text("Position supprimée pour le cycle de vie  : " + $('#lifeCycle option:selected').text());
-		console.log("delete localstorage : " + $('#lifeCycle option:selected').text());
+		//console.log("delete localstorage : " + $('#lifeCycle option:selected').text());
 
 	});
 
@@ -442,7 +452,7 @@ $(function() {
 		graph.on('change:position', function(eventName, cell) {
 			var positionJ = {};
 			var posElt;
-			console.log(eventName);
+			//console.log(eventName);
 			if(arguments != null){
 				if(arguments[0].attributes != undefined || arguments[0].attributes != null){
 					//console.log(arguments[0].attributes.position.x);
@@ -477,11 +487,36 @@ $(function() {
 			}
 			
 			
-			console.log("record in progress");
+			
 			setLocalStorage(positionJ);
 			getLocalStorage();
 			getCookie()
 		});
+	}
+	
+	/**
+	 * return the number of states stored in a localstorage variable
+	 */
+	
+	function getNbStates(states){
+		var compteur = 0;
+		var pos = localStorage.getItem($('#lifeCycle option:selected').text());
+		var getPosition = JSON.parse(pos);
+
+		var  p = eval( "(" + pos + ")");  
+		console.log(getPosition)
+		for (var key in p) {
+			states.forEach(function(s, ide) {
+			if(s.id == p[key].element)
+				
+				compteur ++;
+			});
+			
+
+		}
+		
+		console.log(compteur);
+		return compteur;
 	}
 
 
