@@ -79,7 +79,7 @@ $(function() {
 					if (graph != null) {
 						graph.clear();
 					}
-					localStorage.removeItem($('#lifeCycle option:selected').text());
+					//localStorage.removeItem($('#lifeCycle option:selected').text());
 					createState(data.state);
 					createTransition(data.state);
 					event();
@@ -277,14 +277,14 @@ $(function() {
 	function createState(states) {
 		states.forEach(function(s, ide) {
 
-			var localStoragePosition = JSON.parse(localStorage.getItem($('#lifeCycle option:selected').text()));
-			if (localStoragePosition == null) {
+			var getCookiePosition = JSON.parse(localStorage.getItem($('#lifeCycle option:selected').text()));
+			if (getCookiePosition == null) {
 				createElement(s.id, xs + 100, ys + 100);
 				console.debug("cookie does not exist yet");
 			} else {
-				for (var pos in localStoragePosition) {
-					if (s.id == localStoragePosition[pos].element)
-						createElement(s.id, localStoragePosition[pos].left, localStoragePosition[pos].top);
+				for (var pos in getCookiePosition) {
+					if (s.id == getCookiePosition[pos].element)
+						createElement(s.id, getCookiePosition[pos].left, getCookiePosition[pos].top);
 				}
 			}
 		});
@@ -335,7 +335,7 @@ $(function() {
 
 		var i;
 
-//		console.debug("local storage");
+		console.debug("local storage");
 //		for (i = 0; i < localStorage.length; i++) {
 //			console.debug(localStorage.key(i) + "=[" + localStorage.getItem(localStorage.key(i)) + "]");
 //		}
@@ -407,22 +407,22 @@ $(function() {
 			console.log(eventName);
 			if(arguments != null){
 				if(arguments[0].attributes != undefined || arguments[0].attributes != null){
-					console.log(arguments[0].attributes.position.x);
-					console.log(arguments[0].id);
+					//console.log(arguments[0].attributes.position.x);
+					//console.log(arguments[0].id);
 					$("*[model-id]").each(function(id, ide) {
 
 						var i = "#j_" + id;
 						var position = $(ide).offset();
 						if(arguments[0].id == $(ide).attr('model-id') ){
-//							console.log("x= " + arguments[0].attributes.position.x);
-//							console.log("id = " + arguments[0].id);
+							//console.log("x= " + arguments[0].attributes.position.x);
+							//console.log("id = " + arguments[0].id);
 							posElt = {
 									'left': arguments[0].attributes.position.x,
 									'top': arguments[0].attributes.position.y,
 									'element': $(ide).attr('model-id')
 							};
 						}else{
-//							console.log("id j =  " + id + "nom = " + $(ide).attr('model-id'));
+							//console.log("id j =  " + id + "nom = " + $(ide).attr('model-id'));
 							posElt = {
 									'left': position.left,
 									'top': position.top,
@@ -437,7 +437,7 @@ $(function() {
 				}
 
 			}
-
+			console.log("record in progress");
 			setLocalStorage(positionJ);
 			getLocalStorage();
 			getCookie()
