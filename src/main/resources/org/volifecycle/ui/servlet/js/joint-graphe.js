@@ -9,7 +9,7 @@ $(function() {
 	var url = getContextPath() + "/GenerateJsonLifeCycleServlet?action=showList";
 
 	//joint js variable
-	var globalGraph;
+	
 	var graph;
 	var uml;
 	var erd;
