@@ -9,7 +9,7 @@ $(function() {
 	var url = getContextPath() + "/GenerateJsonLifeCycleServlet?action=showList";
 
 	//joint js variable
-	var globalGraph;
+	
 	var graph;
 	var uml;
 	var erd;
@@ -19,6 +19,9 @@ $(function() {
 	var x = 0;
 	var y = 0;
 
+	var positionJ;
+	var nbTransition = 0;
+
 
 	$.ajax(url, {
 		type: 'GET', // it's easier to read GET request parameters
@@ -26,7 +29,7 @@ $(function() {
 		async: true,
 		success: function(data) {
 			if (data != null) {
-				console.debug(data.length);
+				//console.debug(data.length);
 				data.list.forEach(function(status, index) {
 					$("#lifeCycle").append($('<option>', {
 						value: index,
@@ -52,7 +55,7 @@ $(function() {
 	 *
 	 */
 	$("#lifeCycle").change(function(event) {
-		
+
 		createGraph();
 	});
 
@@ -60,9 +63,9 @@ $(function() {
 	 * Set a new graph each time this function is called 
 	 */
 	function createGraph(){
-		
+
 		graph = new joint.dia.Graph;
-		
+
 		var selectValue = $('#lifeCycle').val();
 		$("#paper").html('');
 		console.debug("test");
@@ -80,8 +83,10 @@ $(function() {
 						graph.clear();
 					}
 					//localStorage.removeItem($('#lifeCycle option:selected').text());
+					getNbTransitionJson(data.state);
 					createState(data.state);
 					createTransition(data.state);
+
 					event();
 
 				} else {
@@ -122,7 +127,7 @@ $(function() {
 		/**
 		 * Create a custom view for that element that displays an HTML div above it.
 		 */
-		
+
 
 		joint.shapes.html.ElementView = joint.dia.ElementView.extend({
 
@@ -171,7 +176,7 @@ $(function() {
 	 * create a new transition element template
 	 * 
 	 */
-	function createTemplateContentElementTransition(label, listAction, id, x, y) {
+	function createTemplateContentElementTransition(label, listAction, id, x, lengthT) {
 		//arrayChecker = ["check 1", "check 2"];
 		var html = '<button class="delete btn btn-success" type="button" data-toggle="collapse" data-target="#collapse' + id + '" aria-expanded="false"        aria-,' + 'controls="collapseExample">!</button>' + '<a href="#" class="btn btn-info btn-lg"><label>' + label + '</label>'
 
@@ -182,7 +187,7 @@ $(function() {
 			})
 		} + '<text></text>' + '<span></span><br/>' + '</div>';
 		//console.debug(arrayChecker);
-		var elementTransition = createElementTransition(html, label, x, y);
+		var elementTransition = createElementTransition(html, label, x, lengthT);
 		return elementTransition;
 
 	}
@@ -192,7 +197,9 @@ $(function() {
 	 *  create transition element with an html template
 	 *
 	 */
-	function createElementTransition(contentHtml, label, x, y) {
+	function createElementTransition(contentHtml, label, x, lengthT) {
+
+
 
 		var idt = label + x;
 		console.debug(idt);
@@ -212,14 +219,12 @@ $(function() {
 			content: contentHtml
 
 		});
+		//get positions from localstorage
 		var getPosition = JSON.parse(localStorage.getItem($('#lifeCycle option:selected').text()));
-		if (getPosition != null) {
+		if (getPosition != null && nbTransition == lengthT) {
 			for (var pos in getPosition) {
 				if (getPosition[pos].element == element.id) {
-					console.debug("element id = " + element.id + "sa position x = " + getPosition[pos].left);
-					console.debug("element id = " + element.id + "sa position y = " + getPosition[pos].top);
-
-
+				
 					element.get('position').x = getPosition[pos].left;
 					element.get('position').y = getPosition[pos].top;
 
@@ -291,13 +296,18 @@ $(function() {
 	 *  
 	 *  
 	 *  */
-	
+
 	function createState(states) {
+
+		var compteur = getNbStates(states);
+		
+
+
 		states.forEach(function(s, ide) {
 
 			var getCookiePosition = JSON.parse(localStorage.getItem($('#lifeCycle option:selected').text()));
-			
-			if (getCookiePosition == null) {
+
+			if (getCookiePosition == null || compteur != states.length) {
 				createElement(s.id,  Math.random() * (500) + 1,  Math.random() * (500) + 1);
 				console.debug("cookie does not exist yet");
 			} else {
@@ -309,11 +319,17 @@ $(function() {
 		});
 	}
 
+	/**
+	 * 
+	 */
+
 	function createTransition(states) {
+
+		var lengthT =  getyNbTransition(states);
 		states.forEach(function(state, ide) {
 			if (state.transitionMap != null) {
 				$.each(state.transitionMap, function(item, trans) {
-					var transition = createTemplateContentElementTransition(trans.descriptionT, trans.actions, state.id + '-' + trans.id + idCollapse++, x, y);
+					var transition = createTemplateContentElementTransition(trans.descriptionT, trans.actions, state.id + '-' + trans.id + idCollapse++, x, lengthT);
 					x = x + 250;
 					y = y + 100;
 
@@ -321,7 +337,7 @@ $(function() {
 
 					createLinkById(state.id, transition.id);
 					trans.targetStates.forEach(function(element, index) {
-						console.debug(element);
+						//console.debug(element);
 						createLinkById(transition.id, element);
 
 					})
@@ -342,7 +358,7 @@ $(function() {
 
 		var cposition = $('#lifeCycle option:selected').text();
 		localStorage.setItem(cposition, JSON.stringify(position));
-		console.debug(JSON.stringify(position));
+		//console.debug(JSON.stringify(position));
 	}
 
 	/**
@@ -361,20 +377,16 @@ $(function() {
 	 */
 	function getCookie() {
 
-		var i;
-
-		console.debug("local storage");
-//		for (i = 0; i < localStorage.length; i++) {
-//			console.debug(localStorage.key(i) + "=[" + localStorage.getItem(localStorage.key(i)) + "]");
-//		}
-
-
+		console.debug("recording positions from "+ $('#lifeCycle option:selected').text() +"  in progress  ");
 	}
-
+	
+	/**
+	 * event calls if we want to delete datas into localstorage(developer only)
+	 */
 	$("#delete").click(function(){
 		localStorage.removeItem($('#lifeCycle option:selected').text());
 		$("#model-text").text("Position supprimée pour le cycle de vie  : " + $('#lifeCycle option:selected').text());
-		console.log("delete localstorage : " + $('#lifeCycle option:selected').text());
+		
 
 	});
 
@@ -442,25 +454,23 @@ $(function() {
 		graph.on('change:position', function(eventName, cell) {
 			var positionJ = {};
 			var posElt;
-			console.log(eventName);
+			
 			if(arguments != null){
 				if(arguments[0].attributes != undefined || arguments[0].attributes != null){
-					//console.log(arguments[0].attributes.position.x);
-					//console.log(arguments[0].id);
+					
 					$("*[model-id]").each(function(id, ide) {
 
 						var i = "#j_" + id;
 						var position = $(ide).offset();
 						if(arguments[0].id == $(ide).attr('model-id') ){
-							//console.log("x= " + arguments[0].attributes.position.x);
-							//console.log("id = " + arguments[0].id);
+							
 							posElt = {
 									'left': arguments[0].attributes.position.x,
 									'top': arguments[0].attributes.position.y,
 									'element': $(ide).attr('model-id')
 							};
 						}else{
-							//console.log("id j =  " + id + "nom = " + $(ide).attr('model-id'));
+							
 							posElt = {
 									'left': position.left,
 									'top': position.top,
@@ -475,13 +485,92 @@ $(function() {
 				}
 
 			}
-			
-			
-			console.log("record in progress");
+
+
+
 			setLocalStorage(positionJ);
 			getLocalStorage();
 			getCookie()
 		});
+	}
+
+	/**
+	 * return the number of states which are the same  stored in a localstorage variable and json 
+	 */
+
+	function getNbStates(states){
+		var compteur = 0;
+		var pos = localStorage.getItem($('#lifeCycle option:selected').text());
+		var getPosition = JSON.parse(pos);
+
+		var  p = eval( "(" + pos + ")");  
+		
+		for (var key in p) {
+			states.forEach(function(s, ide) {
+				if(s.id == p[key].element)
+
+					compteur ++;
+			});
+
+
+		}
+
+		
+		return compteur;
+	};
+
+
+	/**
+	 * return the number of transitions which are the same  stored in a localstorage variable and json data
+	 */
+	function getyNbTransition(states){
+
+		var compteur = 0;
+		var x = 0;
+		var pos = localStorage.getItem($('#lifeCycle option:selected').text());
+
+
+		var  p = eval( "(" + pos + ")");  
+
+		tlength = 0;
+
+		states.forEach(function(s, ide) {
+			if (s.transitionMap != null) {
+				s.transitionMap.forEach(function(transition,idt){
+
+					tlength ++;
+					var transitionN = transition.descriptionT + x;
+					for (var key in p) {
+						if(transitionN == p[key].element)
+							compteur ++;
+					}
+					x = x + 250;
+				})
+
+
+			}
+		})
+
+		
+		return compteur;
+	};
+
+
+	/**
+	 * get the number of transitions presents in a lifecycle
+	 */
+	function getNbTransitionJson(states){
+		states.forEach(function(s, ide) {
+			if (s.transitionMap != null) {
+				s.transitionMap.forEach(function(transition,idt){
+
+					nbTransition ++;
+
+				})
+			}
+		})
+
+
 	}
 
 
