@@ -219,14 +219,12 @@ $(function() {
 			content: contentHtml
 
 		});
+		//get positions from localstorage
 		var getPosition = JSON.parse(localStorage.getItem($('#lifeCycle option:selected').text()));
 		if (getPosition != null && nbTransition == lengthT) {
 			for (var pos in getPosition) {
 				if (getPosition[pos].element == element.id) {
-					//console.debug("element id = " + element.id + "sa position x = " + getPosition[pos].left);
-					//console.debug("element id = " + element.id + "sa position y = " + getPosition[pos].top);
-
-
+				
 					element.get('position').x = getPosition[pos].left;
 					element.get('position').y = getPosition[pos].top;
 
@@ -302,8 +300,7 @@ $(function() {
 	function createState(states) {
 
 		var compteur = getNbStates(states);
-		console.log('etats dans le local:' + compteur);
-		console.log('etats dans le json:' + states.length);
+		
 
 
 		states.forEach(function(s, ide) {
@@ -389,7 +386,7 @@ $(function() {
 	$("#delete").click(function(){
 		localStorage.removeItem($('#lifeCycle option:selected').text());
 		$("#model-text").text("Position supprimée pour le cycle de vie  : " + $('#lifeCycle option:selected').text());
-		//console.log("delete localstorage : " + $('#lifeCycle option:selected').text());
+		
 
 	});
 
@@ -457,25 +454,23 @@ $(function() {
 		graph.on('change:position', function(eventName, cell) {
 			var positionJ = {};
 			var posElt;
-			//console.log(eventName);
+			
 			if(arguments != null){
 				if(arguments[0].attributes != undefined || arguments[0].attributes != null){
-					//console.log(arguments[0].attributes.position.x);
-					//console.log(arguments[0].id);
+					
 					$("*[model-id]").each(function(id, ide) {
 
 						var i = "#j_" + id;
 						var position = $(ide).offset();
 						if(arguments[0].id == $(ide).attr('model-id') ){
-							//console.log("x= " + arguments[0].attributes.position.x);
-							//console.log("id = " + arguments[0].id);
+							
 							posElt = {
 									'left': arguments[0].attributes.position.x,
 									'top': arguments[0].attributes.position.y,
 									'element': $(ide).attr('model-id')
 							};
 						}else{
-							//console.log("id j =  " + id + "nom = " + $(ide).attr('model-id'));
+							
 							posElt = {
 									'left': position.left,
 									'top': position.top,
@@ -509,7 +504,7 @@ $(function() {
 		var getPosition = JSON.parse(pos);
 
 		var  p = eval( "(" + pos + ")");  
-		console.log(getPosition)
+		
 		for (var key in p) {
 			states.forEach(function(s, ide) {
 				if(s.id == p[key].element)
@@ -520,13 +515,13 @@ $(function() {
 
 		}
 
-		console.log(compteur);
+		
 		return compteur;
 	};
 
 
 	/**
-	 * get the number of transitions presents in localStorage
+	 * return the number of transitions which are the same  stored in a localstorage variable and json data
 	 */
 	function getyNbTransition(states){
 
@@ -556,8 +551,7 @@ $(function() {
 			}
 		})
 
-		console.log("taille des transitions " + tlength);
-		console.log("nombre de transition égales = " + compteur);
+		
 		return compteur;
 	};
 
