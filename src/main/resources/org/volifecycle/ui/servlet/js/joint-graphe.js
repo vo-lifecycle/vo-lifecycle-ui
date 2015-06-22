@@ -335,10 +335,10 @@ $(function() {
 
 		var i;
 
-		console.debug("local storage");
-		for (i = 0; i < localStorage.length; i++) {
-			console.debug(localStorage.key(i) + "=[" + localStorage.getItem(localStorage.key(i)) + "]");
-		}
+//		console.debug("local storage");
+//		for (i = 0; i < localStorage.length; i++) {
+//			console.debug(localStorage.key(i) + "=[" + localStorage.getItem(localStorage.key(i)) + "]");
+//		}
 
 
 	}
@@ -414,15 +414,15 @@ $(function() {
 						var i = "#j_" + id;
 						var position = $(ide).offset();
 						if(arguments[0].id == $(ide).attr('model-id') ){
-							console.log("x= " + arguments[0].attributes.position.x);
-							console.log("id = " + arguments[0].id);
+//							console.log("x= " + arguments[0].attributes.position.x);
+//							console.log("id = " + arguments[0].id);
 							posElt = {
 									'left': arguments[0].attributes.position.x,
 									'top': arguments[0].attributes.position.y,
 									'element': $(ide).attr('model-id')
 							};
 						}else{
-							console.log("id j =  " + id + "nom = " + $(ide).attr('model-id'));
+//							console.log("id j =  " + id + "nom = " + $(ide).attr('model-id'));
 							posElt = {
 									'left': position.left,
 									'top': position.top,
