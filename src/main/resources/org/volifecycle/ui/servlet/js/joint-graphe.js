@@ -119,8 +119,10 @@ $(function() {
 			}, joint.shapes.basic.Rect.prototype.defaults)
 		});
 
-		//Create a custom view for that element that displays an HTML div above it.
-		//-------------------------------------------------------------------------
+		/**
+		 * Create a custom view for that element that displays an HTML div above it.
+		 */
+		
 
 		joint.shapes.html.ElementView = joint.dia.ElementView.extend({
 
@@ -164,7 +166,11 @@ $(function() {
 
 
 	}
-
+	/**
+	 * 
+	 * create a new transition element template
+	 * 
+	 */
 	function createTemplateContentElementTransition(label, listAction, id, x, y) {
 		//arrayChecker = ["check 1", "check 2"];
 		var html = '<button class="delete btn btn-success" type="button" data-toggle="collapse" data-target="#collapse' + id + '" aria-expanded="false"        aria-,' + 'controls="collapseExample">!</button>' + '<a href="#" class="btn btn-info btn-lg"><label>' + label + '</label>'
@@ -172,7 +178,7 @@ $(function() {
 		+'</a>' + '<div id= "collapse' + id + '" class="collapse blue" aria-expanded="false" style="background-color: white; width:180px;">'
 		if (listAction != null) {
 			listAction.forEach(function(action, index) {
-				html += "<p>" + action.description + "</p>"
+				html += "<a>" + action.description + "</a>"
 			})
 		} + '<text></text>' + '<span></span><br/>' + '</div>';
 		//console.debug(arrayChecker);
@@ -181,8 +187,11 @@ $(function() {
 
 	}
 
-
-	//** create transition element with an html template **//
+	/**
+	 *   
+	 *  create transition element with an html template
+	 *
+	 */
 	function createElementTransition(contentHtml, label, x, y) {
 
 		var idt = label + x;
@@ -226,7 +235,10 @@ $(function() {
 		return element;
 	}
 
-	//** create state of the graph **//
+	/**
+	 *  create state of the graph 
+	 *  
+	 */
 	function createElement(id,x,y) {
 		var elm = new joint.shapes.erd.Entity({
 			id: id,
@@ -245,7 +257,10 @@ $(function() {
 		return elm;
 	};
 
-	//** create link beteween state and transition element **//
+	/**
+	 * 
+	 *  create link beteween state and transition element 
+	 */
 	function createLinkById(sourceState, targetState) {
 
 		var myLink = new erd.Line({
@@ -270,16 +285,20 @@ $(function() {
 		return myLink;
 	}
 
-	//*** get state from json data  ***//
-	var xs = 10;
-	var ys = 600;
-
+	/**
+	 * 
+	 *	get state from json data  
+	 *  
+	 *  
+	 *  */
+	
 	function createState(states) {
 		states.forEach(function(s, ide) {
 
 			var getCookiePosition = JSON.parse(localStorage.getItem($('#lifeCycle option:selected').text()));
+			
 			if (getCookiePosition == null) {
-				createElement(s.id, xs + 100, ys + 100);
+				createElement(s.id,  Math.random() * (500) + 1,  Math.random() * (500) + 1);
 				console.debug("cookie does not exist yet");
 			} else {
 				for (var pos in getCookiePosition) {
@@ -315,22 +334,31 @@ $(function() {
 	}
 
 
-	//** Set a new localStorage and store positions of joint js generated elements **// 
+	/** 
+	 * Set a new localStorage and store positions of joint js generated elements 
+	 * 
+	 */
 	function setLocalStorage(position) {
 
 		var cposition = $('#lifeCycle option:selected').text();
 		localStorage.setItem(cposition, JSON.stringify(position));
-		//console.debug(JSON.stringify(position));
+		console.debug(JSON.stringify(position));
 	}
 
-	//** display localstorage content postions **//
+	/**
+	 * display localstorage content postions 
+	 * 
+	 */
 	function getLocalStorage() {
 
 		var getPosition = JSON.parse(localStorage.getItem($('#lifeCycle option:selected').text()));
 
 	}
 
-	//** Display localStorage stored in cache **//
+	/**
+	 *  Display localStorage stored in cache 
+	 * 
+	 */
 	function getCookie() {
 
 		var i;
@@ -350,7 +378,10 @@ $(function() {
 
 	});
 
-	//** Return context path **//
+	/**
+	 *  Return context path 
+	 *  
+	 */
 	function getContextPath() {
 
 		return window.location.pathname.substring(0, window.location.pathname.indexOf("/", 2));
@@ -358,8 +389,11 @@ $(function() {
 
 
 
-//	*** cookie **//
-//	** get positions of all elements of graph **//
+	//	*** cookie **//
+	/** 
+	 * get positions of all elements of graph 
+	 * 
+	 */
 	$("#record").click(function() {
 
 		console.debug("record in progress");
@@ -399,7 +433,11 @@ $(function() {
 
 	//function showGraphEvent(){
 
-	//event handler on each graph's element , when an element is drag, this event is called
+	/**
+	 * event handler on each graph's element , when an element is drag, this event is called
+	 * 
+	 * 
+	 */
 	function event(){
 		graph.on('change:position', function(eventName, cell) {
 			var positionJ = {};
@@ -437,6 +475,8 @@ $(function() {
 				}
 
 			}
+			
+			
 			console.log("record in progress");
 			setLocalStorage(positionJ);
 			getLocalStorage();
