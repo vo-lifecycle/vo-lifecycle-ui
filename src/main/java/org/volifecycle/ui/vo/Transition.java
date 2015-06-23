@@ -23,7 +23,7 @@ public class Transition implements Serializable {
     /**
      * List the composites actions
      */
-    public List<CompositeAction> actionsList;
+    public List<Action> actionsList;
 
     /**
      * 
@@ -138,7 +138,7 @@ public class Transition implements Serializable {
     /**
      * @return the compositeActions
      */
-    public List<CompositeAction> getActionsList() {
+    public List<Action> getActionsList() {
         return actionsList;
     }
 
@@ -146,7 +146,7 @@ public class Transition implements Serializable {
      * @param compositeActions
      *            the compositeActions to set
      */
-    public void setActionsList(final List<CompositeAction> actionsList) {
+    public void setActionsList(final List<Action> actionsList) {
         this.actionsList = actionsList;
     }
 

@@ -19,7 +19,7 @@ import org.volifecycle.lifecycle.impl.LifeCycleCompositeActionImpl;
 import org.volifecycle.lifecycle.impl.LifeCycleTransitionImpl;
 import org.volifecycle.ui.bean.LifeCycleContainerJson;
 import org.volifecycle.ui.bean.LifeCycleContainerLight;
-import org.volifecycle.ui.vo.CompositeAction;
+import org.volifecycle.ui.vo.Action;
 import org.volifecycle.ui.vo.LifeCycle;
 import org.volifecycle.ui.vo.SimpleAction;
 import org.volifecycle.ui.vo.State;
@@ -81,7 +81,7 @@ public class HandlerServlet implements Serializable {
      * 
      * declare list of compositeAction.
      */
-    private List<CompositeAction> listCompositeAction;
+    private List<Action> listCompositeAction;
 
     /**
      * declare datas.
@@ -193,11 +193,11 @@ public class HandlerServlet implements Serializable {
                     // }
                     // }
                     // }
-                    listCompositeAction = new ArrayList<CompositeAction>();
+                    listCompositeAction = new ArrayList<Action>();
                     if (null != infosTransition.getActions()) {
 
                         for (LifeCycleAction<?> action : infosTransition.getActions()) {
-                            CompositeAction cAction = new CompositeAction();
+                            Action cAction = new Action();
                             if (action instanceof LifeCycleCompositeActionImpl<?>) {
 
                                 LifeCycleCompositeActionImpl<?> composite = (LifeCycleCompositeActionImpl<?>) action;
