@@ -21,6 +21,7 @@ $(function() {
 
 	var positionJ;
 	var nbTransition = 0;
+	var lengthT;
 
 
 	$.ajax(url, {
@@ -56,6 +57,7 @@ $(function() {
 	 */
 	$("#lifeCycle").change(function(event) {
 
+		alert("changement de cycle");
 		createGraph();
 	});
 
@@ -79,9 +81,9 @@ $(function() {
 				if (data != null) {
 
 					//localStorage.removeItem($('#lifeCycle option:selected').text());
-					if (graph != null) {
-						graph.clear();
-					}
+//					if (graph != null) {
+//						graph.clear();
+//					}
 					//localStorage.removeItem($('#lifeCycle option:selected').text());
 					getNbTransitionJson(data.state);
 					createState(data.state);
@@ -180,10 +182,13 @@ $(function() {
 		//arrayChecker = ["check 1", "check 2"];
 		var html = '<button class="delete btn btn-success" type="button" data-toggle="collapse" data-target="#collapse' + id + '" aria-expanded="false"        aria-,' + 'controls="collapseExample">!</button>' + '<a href="#" class="btn btn-info btn-lg"><label>' + label + '</label>'
 
-		+'</a>' + '<div id= "collapse' + id + '" class="collapse blue" aria-expanded="false" style="background-color: white; width:180px;">'
+		+'</a>' + '<div id= "collapse' + id + '" class="collapse blue" aria-expanded="false" style="background-color: white; width:300px;">'
 		if (listAction != null) {
 			listAction.forEach(function(action, index) {
-				html += "<a>" + action.description + "</a>"
+				if(action.actions == null) 
+					html += "&nbsp <a style='color:#4076F2' href=''>" + action.description + "</a><br /><br />"
+				else
+					html += "&nbsp <a style='color:red' href=''>" + action.description + "</a><br /><br />"
 			})
 		} + '<text></text>' + '<span></span><br/>' + '</div>';
 		//console.debug(arrayChecker);
@@ -202,7 +207,8 @@ $(function() {
 
 
 		var idt = label + x;
-		console.debug(idt);
+		console.debug("taille transition json = " + lengthT);
+		console.debug("taille transition in local = " + lengthT);
 
 		var element = new joint.shapes.html.Element({
 			label: label,
@@ -221,10 +227,10 @@ $(function() {
 		});
 		//get positions from localstorage
 		var getPosition = JSON.parse(localStorage.getItem($('#lifeCycle option:selected').text()));
-		if (getPosition != null && nbTransition == lengthT) {
+		if (getPosition != null) {
 			for (var pos in getPosition) {
 				if (getPosition[pos].element == element.id) {
-				
+					console.debug("element= "  + getPosition[pos].element);
 					element.get('position').x = getPosition[pos].left;
 					element.get('position').y = getPosition[pos].top;
 
@@ -316,7 +322,7 @@ $(function() {
 						createElement(s.id, getCookiePosition[pos].left, getCookiePosition[pos].top);
 				}
 			}
-		});
+		})
 	}
 
 	/**
@@ -325,11 +331,11 @@ $(function() {
 
 	function createTransition(states) {
 
-		var lengthT =  getyNbTransition(states);
+		lengthT =  getyNbTransition(states);
 		states.forEach(function(state, ide) {
 			if (state.transitionMap != null) {
 				$.each(state.transitionMap, function(item, trans) {
-					var transition = createTemplateContentElementTransition(trans.descriptionT, trans.actions, state.id + '-' + trans.id + idCollapse++, x, lengthT);
+					var transition = createTemplateContentElementTransition(trans.descriptionT, trans.actionsList, state.id + '-' + trans.id + idCollapse++, x, lengthT);
 					x = x + 250;
 					y = y + 100;
 
