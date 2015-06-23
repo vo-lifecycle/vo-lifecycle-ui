@@ -197,12 +197,11 @@ public class HandlerServlet implements Serializable {
                     if (null != infosTransition.getActions()) {
 
                         for (LifeCycleAction<?> action : infosTransition.getActions()) {
-
+                            CompositeAction cAction = new CompositeAction();
                             if (action instanceof LifeCycleCompositeActionImpl<?>) {
 
                                 LifeCycleCompositeActionImpl<?> composite = (LifeCycleCompositeActionImpl<?>) action;
 
-                                CompositeAction cAction = new CompositeAction();
                                 cAction.setId(composite.getId());
                                 cAction.setDescription(composite.getDescription());
 
@@ -227,13 +226,11 @@ public class HandlerServlet implements Serializable {
 
                             } else {
 
-                                SimpleAction act = new SimpleAction();
-
-                                act.setId(action.getId());
-                                act.setDescription(action.getDescription());
+                                cAction.setId(action.getId());
+                                cAction.setDescription(action.getDescription());
 
                                 if (action != null) {
-                                    simpleAction.add(act);
+                                    listCompositeAction.add(cAction);
                                 }
                             }
                         }
@@ -247,8 +244,8 @@ public class HandlerServlet implements Serializable {
                     state.setTransitionMap(transitionList.values());
                     transition.setIdTransition(infosTransition.getId());
                     transition.setTargetStates(targetStates);
-                    transition.setActions(simpleAction);
-                    transition.setCompositeActions(listCompositeAction);
+                    // transition.setActions(simpleAction);
+                    transition.setActionsList(listCompositeAction);
 
                 }
             }

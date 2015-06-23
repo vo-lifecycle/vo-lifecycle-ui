@@ -10,123 +10,144 @@ import java.util.List;
  *
  */
 public class Transition implements Serializable {
-	/**
-	 * Id of a transition
-	 */
-	private String idTransition;
+    /**
+     * Id of a transition
+     */
+    private String idTransition;
 
-	/**
-	 * List of composite actions.
-	 */
-	private List<SimpleAction> actions;
+    /**
+     * List of composite actions.
+     */
+    private List<SimpleAction> actions;
 
-	/**
+    /**
+     * List the composites actions
+     */
+    public List<CompositeAction> actionsList;
+
+    /**
      * 
      */
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * description.
-	 */
-	private String description;
+    /**
+     * description.
+     */
+    private String description;
 
-	/**
-	 * type.
-	 */
-	private String type;
+    /**
+     * type.
+     */
+    private String type;
 
-	/**
-	 * List of targeted states.
-	 */
-	List<String> targetStates;
+    /**
+     * List of targeted states.
+     */
+    List<String> targetStates;
 
-	/**
-	 * @return the id
-	 */
-	public String getIdTransition() {
-		return idTransition;
-	}
+    /**
+     * @return the id
+     */
+    public String getIdTransition() {
+        return idTransition;
+    }
 
-	/**
-	 * @param id
-	 *            the id to set
-	 */
-	public void setIdTransition(String id) {
-		this.idTransition = id;
-	}
+    /**
+     * @param id
+     *            the id to set
+     */
+    public void setIdTransition(final String id) {
+        this.idTransition = id;
+    }
 
-	/**
-	 * @return the type
-	 */
-	public String getType() {
-		return type;
-	}
+    /**
+     * @return the type
+     */
+    public String getType() {
+        return type;
+    }
 
-	/**
-	 * @param type
-	 *            the type to set
-	 */
-	public void setType(String type) {
-		this.type = type;
-	}
+    /**
+     * @param type
+     *            the type to set
+     */
+    public void setType(final String type) {
+        this.type = type;
+    }
 
-	/**
-	 * @return the description
-	 */
-	public String getDescriptionT() {
-		return description;
-	}
+    /**
+     * @return the description
+     */
+    public String getDescriptionT() {
+        return description;
+    }
 
-	/**
-	 * @param description
-	 *            the description to set
-	 */
-	public void setdescription(String description) {
-		this.description = description;
-	}
+    /**
+     * @param description
+     *            the description to set
+     */
+    public void setdescription(final String description) {
+        this.description = description;
+    }
 
-	/**
-	 * @return the actions
-	 */
-	public List<SimpleAction> getActions() {
-		return actions;
-	}
+    /**
+     * @return the actions
+     */
+    public List<SimpleAction> getActions() {
+        return actions;
+    }
 
-	/**
-	 * @param listAction
-	 *            the actions to set
-	 */
-	public void setActions(List<SimpleAction> listAction) {
-		this.actions = listAction;
-	}
+    /**
+     * @param listAction
+     *            the actions to set
+     */
+    public void setActions(final List<SimpleAction> listAction) {
+        this.actions = listAction;
+    }
 
-	/**
-	 * @return the description
-	 */
-	public String getDescription() {
-		return description;
-	}
+    /**
+     * @return the description
+     */
+    public String getDescription() {
+        return description;
+    }
 
-	/**
-	 * @param description
-	 *            the description to set
-	 */
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    /**
+     * @param description
+     *            the description to set
+     */
+    public void setDescription(final String description) {
+        this.description = description;
+    }
 
-	/**
-	 * @return the targetStates
-	 */
-	public List<String> getTargetStates() {
-		return targetStates;
-	}
+    /**
+     * @return the targetStates
+     */
+    public List<String> getTargetStates() {
+        return targetStates;
+    }
 
-	/**
-	 * @param targetStates
-	 *            the targetStates to set
-	 */
-	public void setTargetStates(List<String> targetStates) {
-		this.targetStates = targetStates;
-	}
+    /**
+     * @param targetStates
+     *            the targetStates to set
+     */
+    public void setTargetStates(final List<String> targetStates) {
+        this.targetStates = targetStates;
+    }
+
+    /**
+     * @return the compositeActions
+     */
+    public List<CompositeAction> getActionsList() {
+        return actionsList;
+    }
+
+    /**
+     * @param compositeActions
+     *            the compositeActions to set
+     */
+    public void setActionsList(final List<CompositeAction> actionsList) {
+        this.actionsList = actionsList;
+    }
+
 }
