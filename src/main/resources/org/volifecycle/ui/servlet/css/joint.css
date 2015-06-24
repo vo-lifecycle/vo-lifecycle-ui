@@ -140,7 +140,7 @@ Vertex markers are `<circle>` elements that appear at connection vertex position
    cursor: move;
    cursor: -webkit-grab;
    cursor: -moz-grab;
-/*   display: none;   */   /* setting `display: none` on .marker-arrowheads effectivelly switches of links reconnecting */
+   display: none;      /* setting `display: none` on .marker-arrowheads effectivelly switches of links reconnecting */
 }
 .link-tools {
    opacity: 0;

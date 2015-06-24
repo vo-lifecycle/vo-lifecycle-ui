@@ -16,11 +16,12 @@ $(function() {
 	var paper;
 
 	var idCollapse = 0;
-	var x = 0;
+	
 	var y = 0;
 
 	var positionJ;
 	var nbTransition = 0;
+	var lengthT;
 
 
 	$.ajax(url, {
@@ -56,6 +57,7 @@ $(function() {
 	 */
 	$("#lifeCycle").change(function(event) {
 
+		 $('#paper').load( paper);
 		createGraph();
 	});
 
@@ -78,11 +80,7 @@ $(function() {
 			success: function(data) {
 				if (data != null) {
 
-					//localStorage.removeItem($('#lifeCycle option:selected').text());
-					if (graph != null) {
-						graph.clear();
-					}
-					//localStorage.removeItem($('#lifeCycle option:selected').text());
+
 					getNbTransitionJson(data.state);
 					createState(data.state);
 					createTransition(data.state);
@@ -178,12 +176,21 @@ $(function() {
 	 */
 	function createTemplateContentElementTransition(label, listAction, id, x, lengthT) {
 		//arrayChecker = ["check 1", "check 2"];
-		var html = '<button class="delete btn btn-success" type="button" data-toggle="collapse" data-target="#collapse' + id + '" aria-expanded="false"        aria-,' + 'controls="collapseExample">!</button>' + '<a href="#" class="btn btn-info btn-lg"><label>' + label + '</label>'
+		var html = '<button class="delete btn btn-success" type="button" data-toggle="collapse" data-target="#collapse' + id + '" aria-expanded="false"        aria-,' + 'controls="collapseExample">!</button>' + '<a href="#" class="btn btn-info btn-lg" style="min-width:272px;"><label>' + label + '</label>'
 
-		+'</a>' + '<div id= "collapse' + id + '" class="collapse blue" aria-expanded="false" style="background-color: white; width:180px;">'
+		+'</a>' + '<div id= "collapse' + id + '" class="collapse blue" aria-expanded="false" style="background-color: white; width:300px;">'
 		if (listAction != null) {
 			listAction.forEach(function(action, index) {
-				html += "<a>" + action.description + "</a>"
+				if(action.actions == null) 
+					html += "&nbsp <a >" + action.description + "</a><br /><br />"
+				else{
+					html += "&nbsp <a  href='#'>" + action.description + "</a><br /><br />"
+					html += "<ul>"
+					action.actions.forEach(function(sa,id){
+						html += "<li><p  href='#'>" + sa.description + "</p></li><br />"
+					})
+					html += "</ul>"
+				}
 			})
 		} + '<text></text>' + '<span></span><br/>' + '</div>';
 		//console.debug(arrayChecker);
@@ -202,33 +209,36 @@ $(function() {
 
 
 		var idt = label + x;
-		console.debug(idt);
+		
 
 		var element = new joint.shapes.html.Element({
 			label: label,
 			id: idt,
 			size: {
-				width: 170,
-				height: 28
+				width: 272,
+				height: 47
 			},
 			attrs: {
 				ide: 'ide'
 			},
-			"width": 170,
-			"height": 28,
+			"width": 272,
+			"height": 47,
 			content: contentHtml
 
 		});
-		//get positions from localstorage
+		
 		var getPosition = JSON.parse(localStorage.getItem($('#lifeCycle option:selected').text()));
-		if (getPosition != null && nbTransition == lengthT) {
+		if (getPosition != null) {
 			for (var pos in getPosition) {
 				if (getPosition[pos].element == element.id) {
-				
+					console.debug("element= "  + getPosition[pos].element);
 					element.get('position').x = getPosition[pos].left;
 					element.get('position').y = getPosition[pos].top;
 
+				}else {
+					console.log("not equals");
 				}
+
 			}
 
 		} else {
@@ -316,7 +326,7 @@ $(function() {
 						createElement(s.id, getCookiePosition[pos].left, getCookiePosition[pos].top);
 				}
 			}
-		});
+		})
 	}
 
 	/**
@@ -324,12 +334,12 @@ $(function() {
 	 */
 
 	function createTransition(states) {
-
-		var lengthT =  getyNbTransition(states);
+		var x = 0;
+		lengthT =  getyNbTransition(states);
 		states.forEach(function(state, ide) {
 			if (state.transitionMap != null) {
 				$.each(state.transitionMap, function(item, trans) {
-					var transition = createTemplateContentElementTransition(trans.descriptionT, trans.actions, state.id + '-' + trans.id + idCollapse++, x, lengthT);
+					var transition = createTemplateContentElementTransition(trans.descriptionT, trans.actionsList, state.id + '-' + trans.id + idCollapse++, x, lengthT);
 					x = x + 250;
 					y = y + 100;
 
@@ -358,7 +368,7 @@ $(function() {
 
 		var cposition = $('#lifeCycle option:selected').text();
 		localStorage.setItem(cposition, JSON.stringify(position));
-		//console.debug(JSON.stringify(position));
+		
 	}
 
 	/**
@@ -443,7 +453,7 @@ $(function() {
 	});
 
 
-	//function showGraphEvent(){
+	
 
 	/**
 	 * event handler on each graph's element , when an element is drag, this event is called
