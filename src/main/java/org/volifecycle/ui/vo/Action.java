@@ -7,22 +7,22 @@ public class Action {
     /**
      * Id which is used for forced the result of this action
      */
-    protected String id;
+    private String id;
 
     /**
      * Description
      */
-    protected String description;
+    private String description;
 
     /**
      * target state
      */
-    protected String targetState;
+    private String targetState;
 
     /**
      * List actions wich are executed by "and" predicate operator.
      */
-    protected List<SimpleAction> actions;
+    private List<SimpleAction> actions;
 
     /**
      * @return the id

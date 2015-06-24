@@ -57,7 +57,7 @@ $(function() {
 	 */
 	$("#lifeCycle").change(function(event) {
 
-		alert("changement de cycle");
+		
 		createGraph();
 	});
 
@@ -80,11 +80,7 @@ $(function() {
 			success: function(data) {
 				if (data != null) {
 
-					//localStorage.removeItem($('#lifeCycle option:selected').text());
-//					if (graph != null) {
-//						graph.clear();
-//					}
-					//localStorage.removeItem($('#lifeCycle option:selected').text());
+
 					getNbTransitionJson(data.state);
 					createState(data.state);
 					createTransition(data.state);
@@ -186,9 +182,15 @@ $(function() {
 		if (listAction != null) {
 			listAction.forEach(function(action, index) {
 				if(action.actions == null) 
-					html += "&nbsp <a style='color:#4076F2' href=''>" + action.description + "</a><br /><br />"
-				else
-					html += "&nbsp <a style='color:red' href=''>" + action.description + "</a><br /><br />"
+					html += "&nbsp <a >" + action.description + "</a><br /><br />"
+				else{
+					html += "&nbsp <a  href='#'>" + action.description + "</a><br /><br />"
+					html += "<ul>"
+					action.actions.forEach(function(sa,id){
+						html += "<li><p  href='#'>" + sa.description + "</p></li><br />"
+					})
+					html += "</ul>"0
+				}
 			})
 		} + '<text></text>' + '<span></span><br/>' + '</div>';
 		//console.debug(arrayChecker);

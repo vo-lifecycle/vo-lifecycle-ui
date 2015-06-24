@@ -200,14 +200,14 @@ public class HandlerServlet implements Serializable {
                 }
             }
 
-            if (listCompositeAction != null) {
-                for (Action ca : listCompositeAction) {
-                    System.out.println(ca.getId());
-                    System.out.println(ca.getDescription());
-
-                }
-            }
-            System.out.println();
+            // if (listCompositeAction != null) {
+            // for (Action ca : listCompositeAction) {
+            // System.out.println(ca.getId());
+            // System.out.println(ca.getDescription());
+            //
+            // }
+            // }
+            // System.out.println();
         }
         return lifeCycle;
 

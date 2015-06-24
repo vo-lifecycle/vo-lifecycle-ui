@@ -16,11 +16,6 @@ public class Transition implements Serializable {
     private String idTransition;
 
     /**
-     * List of composite actions.
-     */
-    private List<SimpleAction> actions;
-
-    /**
      * List the composites actions
      */
     public List<Action> actionsList;
@@ -88,21 +83,6 @@ public class Transition implements Serializable {
      */
     public void setdescription(final String description) {
         this.description = description;
-    }
-
-    /**
-     * @return the actions
-     */
-    public List<SimpleAction> getActions() {
-        return actions;
-    }
-
-    /**
-     * @param listAction
-     *            the actions to set
-     */
-    public void setActions(final List<SimpleAction> listAction) {
-        this.actions = listAction;
     }
 
     /**
