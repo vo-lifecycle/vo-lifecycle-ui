@@ -181,60 +181,10 @@ public class HandlerServlet implements Serializable {
 
                         }
                     }
-                    // if (null != infosTransition.getActions()) {
-                    // for (LifeCycleAction<?> action :
-                    // infosTransition.getActions()) {
-                    // SimpleAction act = new SimpleAction();
-                    //
-                    // act.setId(action.getId());
-                    // act.setDescription(action.getDescription());
-                    // if (action != null) {
-                    // simpleAction.add(act);
-                    // }
-                    // }
-                    // }
+
                     listCompositeAction = new ArrayList<Action>();
-                    if (null != infosTransition.getActions()) {
 
-                        for (LifeCycleAction<?> action : infosTransition.getActions()) {
-                            Action cAction = new Action();
-                            if (action instanceof LifeCycleCompositeActionImpl<?>) {
-
-                                LifeCycleCompositeActionImpl<?> composite = (LifeCycleCompositeActionImpl<?>) action;
-
-                                cAction.setId(composite.getId());
-                                cAction.setDescription(composite.getDescription());
-
-                                listofActionComposite = new ArrayList<SimpleAction>();
-
-                                if (null != composite.getActions()) {
-                                    for (LifeCycleAction<?> actionc : composite.getActions()) {
-                                        SimpleAction actionS = new SimpleAction();
-
-                                        // System.out.println(actionc.getId());
-
-                                        actionS.setId(actionc.getId());
-                                        actionS.setDescription(actionc.getDescription());
-                                        listofActionComposite.add(actionS);
-
-                                    }
-                                    cAction.setActions(listofActionComposite);
-
-                                }
-                                if (cAction != null)
-                                    listCompositeAction.add(cAction);
-
-                            } else {
-
-                                cAction.setId(action.getId());
-                                cAction.setDescription(action.getDescription());
-
-                                if (action != null) {
-                                    listCompositeAction.add(cAction);
-                                }
-                            }
-                        }
-                    }
+                    listCompositeAction = getListAction(infosTransition);
 
                     transition.setType(infosTransition.getType());
                     transition.setdescription(infosTransition.getDescription());
@@ -250,8 +200,8 @@ public class HandlerServlet implements Serializable {
                 }
             }
 
-            if (listofActionComposite != null) {
-                for (SimpleAction ca : listofActionComposite) {
+            if (listCompositeAction != null) {
+                for (Action ca : listCompositeAction) {
                     System.out.println(ca.getId());
                     System.out.println(ca.getDescription());
 
@@ -261,5 +211,58 @@ public class HandlerServlet implements Serializable {
         }
         return lifeCycle;
 
+    }
+
+    /**
+     * return the list of all actions of a transitions, whatever composite
+     * action or simple.
+     * 
+     * @param transitionActions
+     * @return
+     */
+
+    public List<Action> getListAction(final LifeCycleTransitionImpl<?> transition) {
+
+        if (null != transition.getActions()) {
+            for (LifeCycleAction<?> action : transition.getActions()) {
+                Action cAction = new Action();
+                if (action instanceof LifeCycleCompositeActionImpl<?>) {
+
+                    LifeCycleCompositeActionImpl<?> composite = (LifeCycleCompositeActionImpl<?>) action;
+
+                    cAction.setId(composite.getId());
+                    cAction.setDescription(composite.getDescription());
+
+                    listofActionComposite = new ArrayList<SimpleAction>();
+
+                    if (null != composite.getActions()) {
+                        for (LifeCycleAction<?> actionc : composite.getActions()) {
+                            SimpleAction actionS = new SimpleAction();
+
+                            // System.out.println(actionc.getId());
+
+                            actionS.setId(actionc.getId());
+                            actionS.setDescription(actionc.getDescription());
+                            listofActionComposite.add(actionS);
+
+                        }
+                        cAction.setActions(listofActionComposite);
+
+                    }
+                    if (cAction != null)
+                        listCompositeAction.add(cAction);
+
+                } else {
+
+                    cAction.setId(action.getId());
+                    cAction.setDescription(action.getDescription());
+
+                    if (action != null) {
+                        listCompositeAction.add(cAction);
+                    }
+                }
+            }
+        }
+        return listCompositeAction;
     }
 }
