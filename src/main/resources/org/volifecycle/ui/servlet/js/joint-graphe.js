@@ -189,7 +189,7 @@ $(function() {
 					action.actions.forEach(function(sa,id){
 						html += "<li><p  href='#'>" + sa.description + "</p></li><br />"
 					})
-					html += "</ul>"0
+					html += "</ul>"
 				}
 			})
 		} + '<text></text>' + '<span></span><br/>' + '</div>';
