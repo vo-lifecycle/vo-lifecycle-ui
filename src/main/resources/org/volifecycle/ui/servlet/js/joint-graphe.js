@@ -176,7 +176,7 @@ $(function() {
 	 */
 	function createTemplateContentElementTransition(label, listAction, id, x, lengthT) {
 		//arrayChecker = ["check 1", "check 2"];
-		var html = '<button class="delete btn btn-success" type="button" data-toggle="collapse" data-target="#collapse' + id + '" aria-expanded="false"        aria-,' + 'controls="collapseExample">!</button>' + '<a href="#" class="btn btn-info btn-lg" style="min-width:162px;"><label>' + label + '</label>'
+		var html = '<button class="delete btn btn-success" type="button" data-toggle="collapse" data-target="#collapse' + id + '" aria-expanded="false"        aria-,' + 'controls="collapseExample">!</button>' + '<a href="#" class="btn btn-info btn-lg" style="min-width:272px;"><label>' + label + '</label>'
 
 		+'</a>' + '<div id= "collapse' + id + '" class="collapse blue" aria-expanded="false" style="background-color: white; width:300px;">'
 		if (listAction != null) {
@@ -215,13 +215,13 @@ $(function() {
 			label: label,
 			id: idt,
 			size: {
-				width: 170,
+				width: 272,
 				height: 47
 			},
 			attrs: {
 				ide: 'ide'
 			},
-			"width": 170,
+			"width": 272,
 			"height": 47,
 			content: contentHtml
 
