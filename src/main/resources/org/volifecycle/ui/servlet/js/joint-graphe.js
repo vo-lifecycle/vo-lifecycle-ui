@@ -99,8 +99,8 @@ $(function() {
 
 		paper = new joint.dia.Paper({
 			el: $('#paper'),
-			width: 1500,
-			height: 2000,
+			width: 2500,
+			height: 3000,
 			gridSize: 10,
 			model: graph
 		});
@@ -242,8 +242,8 @@ $(function() {
 			}
 
 		} else {
-			element.get('position').x = Math.random() * (500) + 1;
-			element.get('position').y = Math.random() * (200) + 1;
+			element.get('position').x = 0;
+			element.get('position').y = x;
 		}
 
 
@@ -308,25 +308,23 @@ $(function() {
 	 *  */
 
 	function createState(states) {
-
+		var statesArr = getAllStatesByTrans(states);
 		var compteur = getNbStates(states);
 		
-
-
-		states.forEach(function(s, ide) {
+		for(var index in statesArr){
 
 			var getCookiePosition = JSON.parse(localStorage.getItem($('#lifeCycle option:selected').text()));
 
 			if (getCookiePosition == null || compteur != states.length) {
-				createElement(s.id,  Math.random() * (500) + 1,  Math.random() * (500) + 1);
+				createElement(statesArr[index],  Math.random() * (500) + 1,  Math.random() * (500) + 1);
 				console.debug("cookie does not exist yet");
 			} else {
 				for (var pos in getCookiePosition) {
-					if (s.id == getCookiePosition[pos].element)
-						createElement(s.id, getCookiePosition[pos].left, getCookiePosition[pos].top);
+					if (statesArr[index] == getCookiePosition[pos].element)
+						createElement(statesArr[index], getCookiePosition[pos].left, getCookiePosition[pos].top);
 				}
 			}
-		})
+		}
 	}
 
 	/**
@@ -582,7 +580,51 @@ $(function() {
 
 
 	}
+	
+	/** get state from all transitions **/
+	function getAllStatesByTrans(states){
+		var statesArray = [];
+		var statesUniqueArray = [];
+		states.forEach(function(state, ide) {
+			statesArray.push(state.id);
+			if (state.transitionMap != null) {
+				$.each(state.transitionMap, function(item, trans) {
+					trans.targetStates.forEach(function(element, index) {
+						
+						
+						statesArray.push(element);
+						
+						
+					})
 
+
+				});
+			}
+			
+		});
+		
+		var unique = [];
+		$.each(statesArray,function(i,el){
+			if($.inArray(el,unique) === -1){
+				unique.push(el);
+			}
+		})
+		console.debug(unique);
+		return unique;
+	}
+	
+	function compareArray(arr1, arr2){
+		console.log("tableaux des etat ");
+		console.log(arr2);
+		console.log("tableaux des état cibles");
+		console.log(arr1);
+		var diff = arr2.filter(function (item, index) {
+			return arr1.indexOf(item) !== arr1.lastIndexOf(item)
+		});
+		console.log(diff.join(" , "));
+		return diff;
+	}
+ 
 
 
 });
