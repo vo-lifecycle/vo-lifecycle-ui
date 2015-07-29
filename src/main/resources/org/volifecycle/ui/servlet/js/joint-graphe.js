@@ -9,14 +9,14 @@ $(function() {
 	var url = getContextPath() + "/GenerateJsonLifeCycleServlet?action=showList";
 
 	//joint js variable
-	
+
 	var graph;
 	var uml;
 	var erd;
 	var paper;
 
 	var idCollapse = 0;
-	
+
 	var y = 0;
 
 	var positionJ;
@@ -57,7 +57,7 @@ $(function() {
 	 */
 	$("#lifeCycle").change(function(event) {
 
-		 $('#paper').load( paper);
+		$('#paper').load( paper);
 		createGraph();
 	});
 
@@ -100,7 +100,7 @@ $(function() {
 		paper = new joint.dia.Paper({
 			el: $('#paper'),
 			width: 2500,
-			height: 3000,
+			height: 10000,
 			gridSize: 10,
 			model: graph
 		});
@@ -174,7 +174,7 @@ $(function() {
 	 * create a new transition element template
 	 * 
 	 */
-	function createTemplateContentElementTransition(label, listAction, id, x, lengthT) {
+	function createTemplateContentElementTransition(label, listAction, id, x,y, lengthT) {
 		//arrayChecker = ["check 1", "check 2"];
 		var html = '<button class="delete btn btn-success" type="button" data-toggle="collapse" data-target="#collapse' + id + '" aria-expanded="false"        aria-,' + 'controls="collapseExample">!</button>' + '<a href="#" class="btn btn-info btn-lg" style="min-width:272px;"><label>' + label + '</label>'
 
@@ -183,18 +183,18 @@ $(function() {
 			listAction.forEach(function(action, index) {
 				if(action.actions == null) 
 					html += "&nbsp <a >" + action.description + "</a><br /><br />"
-				else{
-					html += "&nbsp <a  href='#'>" + action.description + "</a><br /><br />"
-					html += "<ul>"
-					action.actions.forEach(function(sa,id){
-						html += "<li><p  href='#'>" + sa.description + "</p></li><br />"
-					})
-					html += "</ul>"
-				}
+					else{
+						html += "&nbsp <a  href='#'>" + action.description + "</a><br /><br />"
+						html += "<ul>"
+							action.actions.forEach(function(sa,id){
+								html += "<li><p  href='#'>" + sa.description + "</p></li><br />"
+							})
+							html += "</ul>"
+					}
 			})
 		} + '<text></text>' + '<span></span><br/>' + '</div>';
 		//console.debug(arrayChecker);
-		var elementTransition = createElementTransition(html, label, x, lengthT);
+		var elementTransition = createElementTransition(html, label, x, y, lengthT);
 		return elementTransition;
 
 	}
@@ -204,12 +204,12 @@ $(function() {
 	 *  create transition element with an html template
 	 *
 	 */
-	function createElementTransition(contentHtml, label, x, lengthT) {
+	function createElementTransition(contentHtml, label, x,y, lengthT) {
 
 
 
 		var idt = label + x;
-		
+
 
 		var element = new joint.shapes.html.Element({
 			label: label,
@@ -226,7 +226,7 @@ $(function() {
 			content: contentHtml
 
 		});
-		
+
 		var getPosition = JSON.parse(localStorage.getItem($('#lifeCycle option:selected').text()));
 		if (getPosition != null) {
 			for (var pos in getPosition) {
@@ -242,8 +242,8 @@ $(function() {
 			}
 
 		} else {
-			element.get('position').x = 0;
-			element.get('position').y = x;
+			element.get('position').x = x;
+			element.get('position').y = y;
 		}
 
 
@@ -263,7 +263,8 @@ $(function() {
 			},
 			attrs: {
 				text: {
-					text: id
+					text: id,
+					fill: '#2e2e2e'
 				}
 			}
 
@@ -309,22 +310,48 @@ $(function() {
 
 	function createState(states) {
 		var statesArr = getAllStatesByTrans(states);
+		var stateNoTrans = getAllStatesWhithNoTrans(states);
+
 		var compteur = getNbStates(states);
-		
-		for(var index in statesArr){
+		var posy = 0;
+		var posMiddle = 0;
+		var posLeft = 0;
+		states.forEach(function(st,i){
+
 
 			var getCookiePosition = JSON.parse(localStorage.getItem($('#lifeCycle option:selected').text()));
 
+		
 			if (getCookiePosition == null || compteur != states.length) {
-				createElement(statesArr[index],  Math.random() * (500) + 1,  Math.random() * (500) + 1);
-				console.debug("cookie does not exist yet");
+
+				//createElement(st.id, posy+140, posy + 110);
+				if($.inArray(st.id,statesArr) === -1 && ($.inArray(st.id,stateNoTrans) === -1)){
+					createElement(st.id, 0, posy);
+					console.log("etat non transition entrantes" + st.id);
+					
+				}else if($.inArray(st.id,statesArr) !== -1  && ($.inArray(st.id,stateNoTrans) !== -1)){
+					createElement(st.id, 2000, posMiddle);
+					console.log("etat non transition sortantes" + st.id);
+					
+				}else if($.inArray(st.id,statesArr) !== -1  && ($.inArray(st.id,stateNoTrans) === -1)){
+					createElement(st.id, 500, posLeft);
+					console.log("etat  transition sortantes et entrantes " + st.id);
+				}else if($.inArray(st.id,statesArr) === -1 && ($.inArray(st.id,stateNoTrans) !== -1)){
+					createElement(st.id, 2000, posMiddle);
+					console.log("etat non transition entrantes" + st.id);
+					
+				}
+				posy =  posy +150;
+				posMiddle = posMiddle + 150;
+				posLeft = posLeft + 150;
+
 			} else {
 				for (var pos in getCookiePosition) {
-					if (statesArr[index] == getCookiePosition[pos].element)
-						createElement(statesArr[index], getCookiePosition[pos].left, getCookiePosition[pos].top);
+					if (st.id == getCookiePosition[pos].element)
+						createElement(st.id, getCookiePosition[pos].left, getCookiePosition[pos].top);
 				}
 			}
-		}
+		})
 	}
 
 	/**
@@ -333,13 +360,23 @@ $(function() {
 
 	function createTransition(states) {
 		var x = 0;
+		var y = 0;
+		var transition;
+		var statesArrT = getAllStatesByTrans(states);
 		lengthT =  getyNbTransition(states);
 		states.forEach(function(state, ide) {
 			if (state.transitionMap != null) {
 				$.each(state.transitionMap, function(item, trans) {
-					var transition = createTemplateContentElementTransition(trans.descriptionT, trans.actionsList, state.id + '-' + trans.id + idCollapse++, x, lengthT);
+					
+					if($.inArray(state.id,statesArrT) === -1){
+						transition = createTemplateContentElementTransition(trans.descriptionT, trans.actionsList, state.id + '-' + trans.id + idCollapse++, 200, y,lengthT);
+					}else
+					{
+						transition = createTemplateContentElementTransition(trans.descriptionT, trans.actionsList, state.id + '-' + trans.id + idCollapse++, 1200, y , lengthT);
+
+					}
 					x = x + 250;
-					y = y + 100;
+					y = y + 150;
 
 					graph.addCells([transition]);
 
@@ -366,7 +403,7 @@ $(function() {
 
 		var cposition = $('#lifeCycle option:selected').text();
 		localStorage.setItem(cposition, JSON.stringify(position));
-		
+
 	}
 
 	/**
@@ -387,14 +424,14 @@ $(function() {
 
 		console.debug("recording positions from "+ $('#lifeCycle option:selected').text() +"  in progress  ");
 	}
-	
+
 	/**
 	 * event calls if we want to delete datas into localstorage(developer only)
 	 */
 	$("#delete").click(function(){
 		localStorage.removeItem($('#lifeCycle option:selected').text());
 		$("#model-text").text("Position supprimée pour le cycle de vie  : " + $('#lifeCycle option:selected').text());
-		
+
 
 	});
 
@@ -451,7 +488,7 @@ $(function() {
 	});
 
 
-	
+
 
 	/**
 	 * event handler on each graph's element , when an element is drag, this event is called
@@ -462,23 +499,23 @@ $(function() {
 		graph.on('change:position', function(eventName, cell) {
 			var positionJ = {};
 			var posElt;
-			
+
 			if(arguments != null){
 				if(arguments[0].attributes != undefined || arguments[0].attributes != null){
-					
+
 					$("*[model-id]").each(function(id, ide) {
 
 						var i = "#j_" + id;
 						var position = $(ide).offset();
 						if(arguments[0].id == $(ide).attr('model-id') ){
-							
+
 							posElt = {
 									'left': arguments[0].attributes.position.x,
 									'top': arguments[0].attributes.position.y,
 									'element': $(ide).attr('model-id')
 							};
 						}else{
-							
+
 							posElt = {
 									'left': position.left,
 									'top': position.top,
@@ -512,7 +549,7 @@ $(function() {
 		var getPosition = JSON.parse(pos);
 
 		var  p = eval( "(" + pos + ")");  
-		
+
 		for (var key in p) {
 			states.forEach(function(s, ide) {
 				if(s.id == p[key].element)
@@ -523,7 +560,7 @@ $(function() {
 
 		}
 
-		
+
 		return compteur;
 	};
 
@@ -559,7 +596,7 @@ $(function() {
 			}
 		})
 
-		
+
 		return compteur;
 	};
 
@@ -580,29 +617,29 @@ $(function() {
 
 
 	}
-	
+
 	/** get state from all transitions **/
 	function getAllStatesByTrans(states){
 		var statesArray = [];
 		var statesUniqueArray = [];
 		states.forEach(function(state, ide) {
-			statesArray.push(state.id);
+
 			if (state.transitionMap != null) {
 				$.each(state.transitionMap, function(item, trans) {
 					trans.targetStates.forEach(function(element, index) {
-						
-						
+
+
 						statesArray.push(element);
-						
-						
+
+
 					})
 
 
 				});
 			}
-			
+
 		});
-		
+
 		var unique = [];
 		$.each(statesArray,function(i,el){
 			if($.inArray(el,unique) === -1){
@@ -610,9 +647,24 @@ $(function() {
 			}
 		})
 		console.debug(unique);
-		return unique;
+		return statesArray;
 	}
-	
+
+	/** get state from all transitions **/
+	function getAllStatesWhithNoTrans(states){
+		var statesArray = [];
+		states.forEach(function(state, ide) {
+
+			if (state.transitionMap === null) {
+				statesArray.push(state.id);
+			}
+
+		});
+
+		console.log(statesArray);
+		return statesArray;
+	}
+
 	function compareArray(arr1, arr2){
 		console.log("tableaux des etat ");
 		console.log(arr2);
@@ -624,7 +676,7 @@ $(function() {
 		console.log(diff.join(" , "));
 		return diff;
 	}
- 
+
 
 
 });
