@@ -334,7 +334,7 @@ $(function() {
 					console.log("etat non transition sortantes" + st.id);
 					
 				}else if($.inArray(st.id,statesArr) !== -1  && ($.inArray(st.id,stateNoTrans) === -1)){
-					createElement(st.id, 500, posLeft);
+					createElement(st.id, 660, posLeft);
 					console.log("etat  transition sortantes et entrantes " + st.id);
 				}else if($.inArray(st.id,statesArr) === -1 && ($.inArray(st.id,stateNoTrans) !== -1)){
 					createElement(st.id, 2000, posMiddle);
@@ -369,7 +369,7 @@ $(function() {
 				$.each(state.transitionMap, function(item, trans) {
 					
 					if($.inArray(state.id,statesArrT) === -1){
-						transition = createTemplateContentElementTransition(trans.descriptionT, trans.actionsList, state.id + '-' + trans.id + idCollapse++, 200, y,lengthT);
+						transition = createTemplateContentElementTransition(trans.descriptionT, trans.actionsList, state.id + '-' + trans.id + idCollapse++, 300, y,lengthT);
 					}else
 					{
 						transition = createTemplateContentElementTransition(trans.descriptionT, trans.actionsList, state.id + '-' + trans.id + idCollapse++, 1200, y , lengthT);
