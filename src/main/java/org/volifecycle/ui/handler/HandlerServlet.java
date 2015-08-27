@@ -20,6 +20,7 @@ import org.volifecycle.lifecycle.impl.LifeCycleTransitionImpl;
 import org.volifecycle.ui.bean.LifeCycleContainerJson;
 import org.volifecycle.ui.bean.LifeCycleContainerLight;
 import org.volifecycle.ui.vo.Action;
+import org.volifecycle.ui.vo.ItemsByState;
 import org.volifecycle.ui.vo.LifeCycle;
 import org.volifecycle.ui.vo.SimpleAction;
 import org.volifecycle.ui.vo.State;
@@ -128,7 +129,7 @@ public class HandlerServlet implements Serializable {
      * @param manager
      *            .
      */
-    public final LifeCycle getLifeCycleInformations(final LifeCycleManager<?, ?> manager) {
+    public final LifeCycle getLifeCycleInformations(final LifeCycleManager<?, ?> manager, ItemsByState item) {
 
         Map<String, ?> statesById = manager.getStatesById();
         Set<String> keys = statesById.keySet();
@@ -153,6 +154,7 @@ public class HandlerServlet implements Serializable {
 
             state.setId(key);
             state.setDescription(getStateList.getDescription());
+            state.setItems(item.getAllItemsByState(state));
 
             lifeCycle.setStateListCycle(stateList);
             stateList.add(state);

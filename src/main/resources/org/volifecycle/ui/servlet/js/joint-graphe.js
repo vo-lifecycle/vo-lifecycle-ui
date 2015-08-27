@@ -254,7 +254,7 @@ $(function() {
 	 *  create state of the graph 
 	 *  
 	 */
-	function createElement(id,x,y) {
+	function createElement(id,x,y,items) {
 		var elm = new joint.shapes.erd.Entity({
 			id: id,
 			position: {
@@ -263,7 +263,7 @@ $(function() {
 			},
 			attrs: {
 				text: {
-					text: id,
+					text: id + "  " +"(" + items + ")",
 					fill: '#2e2e2e'
 				}
 			}
@@ -326,18 +326,18 @@ $(function() {
 
 				//createElement(st.id, posy+140, posy + 110);
 				if($.inArray(st.id,statesArr) === -1 && ($.inArray(st.id,stateNoTrans) === -1)){
-					createElement(st.id, 0, posy);
+					createElement(st.id, 0, posy,st.items);
 					console.log("etat non transition entrantes" + st.id);
 					
 				}else if($.inArray(st.id,statesArr) !== -1  && ($.inArray(st.id,stateNoTrans) !== -1)){
-					createElement(st.id, 2000, posMiddle);
+					createElement(st.id, 2000, posMiddle,st.items);
 					console.log("etat non transition sortantes" + st.id);
 					
 				}else if($.inArray(st.id,statesArr) !== -1  && ($.inArray(st.id,stateNoTrans) === -1)){
-					createElement(st.id, 660, posLeft);
+					createElement(st.id, 660, posLeft,st.items);
 					console.log("etat  transition sortantes et entrantes " + st.id);
 				}else if($.inArray(st.id,statesArr) === -1 && ($.inArray(st.id,stateNoTrans) !== -1)){
-					createElement(st.id, 2000, posMiddle);
+					createElement(st.id, 2000, posMiddle),st.items;
 					console.log("etat non transition entrantes" + st.id);
 					
 				}
@@ -348,7 +348,7 @@ $(function() {
 			} else {
 				for (var pos in getCookiePosition) {
 					if (st.id == getCookiePosition[pos].element)
-						createElement(st.id, getCookiePosition[pos].left, getCookiePosition[pos].top);
+						createElement(st.id, getCookiePosition[pos].left, getCookiePosition[pos].top,st.items);
 				}
 			}
 		})
