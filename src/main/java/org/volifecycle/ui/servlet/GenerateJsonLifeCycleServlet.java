@@ -2,7 +2,6 @@ package org.volifecycle.ui.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -23,7 +22,6 @@ import org.volifecycle.ui.bean.LifeCycleContainerJson;
 import org.volifecycle.ui.handler.HandlerServlet;
 import org.volifecycle.ui.vo.ItemsByState;
 import org.volifecycle.ui.vo.LifeCycle;
-import org.volifecycle.ui.vo.State;
 
 /**
  * Generation of JSON representation of lifecycle.
@@ -67,12 +65,11 @@ public class GenerateJsonLifeCycleServlet extends HttpServlet {
      * @throws JsonMappingException
      */
     private void generateJSON(final HttpServletRequest req, final HttpServletResponse resp) throws IOException, JsonGenerationException, JsonMappingException {
+
         HandlerServlet handler = new HandlerServlet();
         ObjectMapper mapper = new ObjectMapper();
         LifeCycle lifeCycle = new LifeCycle();
-        LifeCycleContainerJson lifeCycleManagerListToJson = new LifeCycleContainerJson();
-        List<LifeCycleManager<?, ?>> lifecycleManagerList = new ArrayList<LifeCycleManager<?, ?>>();
-        Map<String, ?> mapStatByLifeCycleId = null;
+
         ItemsByState items = null;
 
         resp.setContentType("application/json");
@@ -81,13 +78,13 @@ public class GenerateJsonLifeCycleServlet extends HttpServlet {
         // Load spring context
         ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
         LifeCycleContainer managerContainer = ((LifeCycleContainer) context.getBean("lifecycleContainer"));
-        lifecycleManagerList = managerContainer.getManagerList();
-        mapStatByLifeCycleId = managerContainer.getMapStatByLifeCycleId();
+        List<LifeCycleManager<?, ?>> lifecycleManagerList = managerContainer.getManagerList();
+        Map<String, ?> mapStatByLifeCycleId = managerContainer.getMapStatByLifeCycleId();
 
         handler.init();
 
         // Get list of all managers from a manager container xml file
-        lifeCycleManagerListToJson = handler.getManagerListAttrs(lifecycleManagerList);
+        LifeCycleContainerJson lifeCycleManagerListToJson = handler.getManagerListAttrs(lifecycleManagerList);
 
         // display list of all manager in a json format on the browser
         if (req.getParameter("action") != null) {
@@ -107,10 +104,6 @@ public class GenerateJsonLifeCycleServlet extends HttpServlet {
                 }
 
                 lifeCycle = handler.getLifeCycleInformations(lifecycleManagerList.get(idManagerLifeCycle), items);
-                State state = new State();
-                state.setId("CLOS");
-                Long result = items.getAllItemsByState(state);
-
                 out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(lifeCycle));
             }
         }

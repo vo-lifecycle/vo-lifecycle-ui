@@ -22,6 +22,111 @@ $(function() {
 	var positionJ;
 	var nbTransition = 0;
 	var lengthT;
+	joint.shapes.html = {};
+	joint.shapes.html.Element = joint.shapes.basic.Rect.extend({
+		markup: '<a><g class="rotatable"><g class="scalable"><rect/></g><text/></g></a>',
+		defaults: joint.util.deepSupplement({
+			type: 'html.Element',
+			attrs: {
+				rect: {
+					stroke: 'none',
+					'fill-opacity': 0
+				}
+			}
+		}, joint.shapes.basic.Rect.prototype.defaults)
+	});
+
+	/**
+	 * Create a custom view for that element that displays an HTML div above it.
+	 */
+	joint.shapes.html.ElementView = joint.dia.ElementView.extend({
+
+		template: '<div class="html-element-transition" data-toggle="tooltip" data-placement="bottom"></div>',
+		initialize: function() {
+			_.bindAll(this, 'updateBox');
+			joint.dia.ElementView.prototype.initialize.apply(this, arguments);
+
+			this.$box = $(_.template(this.template)());
+			this.model.on('change', this.updateBox, this);
+			// Remove the box when the model gets removed from the graph.
+			this.model.on('remove', this.removeBox, this);
+
+			this.updateBox();
+		},
+		render: function() {
+			joint.dia.ElementView.prototype.render.apply(this, arguments);
+			this.paper.$el.prepend(this.$box);
+			this.updateBox();
+			return this;
+		},
+		updateBox: function() {
+			// Set the position and dimension of the box so that it covers the JointJS element.
+			var bbox = this.model.getBBox();
+			// Example of updating the HTML with a data stored in the cell model.
+			this.$box.find('label').text(this.model.get('label'));
+			this.$box.find('span').text(this.model.get('select'));
+			this.$box.html(this.model.get('content'));
+			this.$box.css({
+				width: bbox.width,
+				height: bbox.height,
+				left: bbox.x,
+				top: bbox.y,
+				transform: 'rotate(' + (this.model.get('angle') || 0) + 'deg)'
+			});
+		},
+		removeBox: function(evt) {
+			this.$box.remove();
+		}
+	});
+	joint.shapes.html.ElementState = joint.shapes.basic.Rect.extend({
+	    defaults: joint.util.deepSupplement({
+	        type: 'html.ElementState',
+	        attrs: {
+	            rect: { stroke: 'none', 'fill-opacity': 0 }
+	        }
+	    }, joint.shapes.basic.Rect.prototype.defaults)
+	});
+
+	// Create a custom view for that element that displays an HTML div above it.
+	// -------------------------------------------------------------------------
+
+	joint.shapes.html.ElementStateView = joint.dia.ElementView.extend({
+
+	    template:'<div class="html-element-state" data-toggle="tooltip" data-placement="bottom"></div>',
+
+	    initialize: function() {
+	        _.bindAll(this, 'updateBox');
+	        joint.dia.ElementView.prototype.initialize.apply(this, arguments);
+
+	        this.$box = $(_.template(this.template)());
+	       
+	        // Update the box position whenever the underlying model changes.
+	        this.model.on('change', this.updateBox, this);
+	        // Remove the box when the model gets removed from the graph.
+	        this.model.on('remove', this.removeBox, this);
+
+	        this.updateBox();
+	    },
+	    render: function() {
+	        joint.dia.ElementView.prototype.render.apply(this, arguments);
+	        this.paper.$el.prepend(this.$box);
+	        this.updateBox();
+	        return this;
+	    },
+	    updateBox: function() {
+	        // Set the position and dimension of the box so that it covers the JointJS element.
+	        var bbox = this.model.getBBox();
+	        // Example of updating the HTML with a data stored in the cell model.
+	        this.$box.find('label').text(this.model.get('label'));
+	        this.$box.find('span').text(this.model.get('select'));
+	        this.$box.html(this.model.get('content'));
+	        this.$box.css({ width: bbox.width, height: bbox.height, left: bbox.x, top: bbox.y, transform: 'rotate(' + (this.model.get('angle') || 0) + 'deg)' });
+	    },
+	    removeBox: function(evt) {
+	        this.$box.remove();
+	    }
+	});
+
 
 
 	$.ajax(url, {
@@ -108,64 +213,8 @@ $(function() {
 
 		uml = joint.shapes.uml;
 
-		joint.shapes.html = {};
-		joint.shapes.html.Element = joint.shapes.basic.Rect.extend({
-			markup: '<a><g class="rotatable"><g class="scalable"><rect/></g><text/></g></a>',
-			defaults: joint.util.deepSupplement({
-				type: 'html.Element',
-				attrs: {
-					rect: {
-						stroke: 'none',
-						'fill-opacity': 0
-					}
-				}
-			}, joint.shapes.basic.Rect.prototype.defaults)
-		});
-
-		/**
-		 * Create a custom view for that element that displays an HTML div above it.
-		 */
 
 
-		joint.shapes.html.ElementView = joint.dia.ElementView.extend({
-
-			template: '<div class="html-element-transition" data-toggle="tooltip" data-placement="bottom"></div>',
-			initialize: function() {
-				_.bindAll(this, 'updateBox');
-				joint.dia.ElementView.prototype.initialize.apply(this, arguments);
-
-				this.$box = $(_.template(this.template)());
-				this.model.on('change', this.updateBox, this);
-				// Remove the box when the model gets removed from the graph.
-				this.model.on('remove', this.removeBox, this);
-
-				this.updateBox();
-			},
-			render: function() {
-				joint.dia.ElementView.prototype.render.apply(this, arguments);
-				this.paper.$el.prepend(this.$box);
-				this.updateBox();
-				return this;
-			},
-			updateBox: function() {
-				// Set the position and dimension of the box so that it covers the JointJS element.
-				var bbox = this.model.getBBox();
-				// Example of updating the HTML with a data stored in the cell model.
-				this.$box.find('label').text(this.model.get('label'));
-				this.$box.find('span').text(this.model.get('select'));
-				this.$box.html(this.model.get('content'));
-				this.$box.css({
-					width: bbox.width,
-					height: bbox.height,
-					left: bbox.x,
-					top: bbox.y,
-					transform: 'rotate(' + (this.model.get('angle') || 0) + 'deg)'
-				});
-			},
-			removeBox: function(evt) {
-				this.$box.remove();
-			}
-		});
 
 
 	}
@@ -205,18 +254,13 @@ $(function() {
 	 *
 	 */
 	function createElementTransition(contentHtml, label, x,y, lengthT) {
-
-
-
 		var idt = label + x;
-
-
 		var element = new joint.shapes.html.Element({
 			label: label,
 			id: idt,
 			size: {
 				width: 272,
-				height: 47
+				height: 47		
 			},
 			attrs: {
 				ide: 'ide'
@@ -254,23 +298,31 @@ $(function() {
 	 *  create state of the graph 
 	 *  
 	 */
-	function createElement(id,x,y,items) {
-		var elm = new joint.shapes.erd.Entity({
+	function createElementState(id,x,y,items) {
+		var html = '<button class="delete btn btn-success" type="button" data-toggle="collapse" data-target="#collapse' + id + '" aria-expanded="false"        aria-,' + 'controls="collapseExample">'+ items +'</button>' + '<a href="#" class="btn btn-success btn-lg" style="min-width:150px;"><label>' + id  + '</label>'
+
+		+'</a>' + '<div id= "collapse' + id + '" class="collapse blue" aria-expanded="false" style="background-color: white; width:300px;">'
+		 + '<text></text>' + '<span></span><br/>' + '</div>';
+		var state = new joint.shapes.html.ElementState({
 			id: id,
+			label:id,
+			size: { width: 157, height: 47}, 
 			position: {
 				x: x,
 				y: y
 			},
-			attrs: {
-				text: {
-					text: id + "  " +"(" + items + ")",
-					fill: '#2e2e2e'
-				}
-			}
+			content: html
+			
+//			attrs: {
+//				text: {
+//					text: id + "  " +"(" + items + ")",
+//					fill: '#2e2e2e'
+//				}
+//			}
 
 		});
-		graph.addCell(elm);
-		return elm;
+		graph.addCell([state]);
+		return state;
 	};
 
 	/**
@@ -326,18 +378,18 @@ $(function() {
 
 				//createElement(st.id, posy+140, posy + 110);
 				if($.inArray(st.id,statesArr) === -1 && ($.inArray(st.id,stateNoTrans) === -1)){
-					createElement(st.id, 0, posy,st.items);
+					createElementState(st.id, 0, posy,st.items);
 					console.log("etat non transition entrantes" + st.id);
 					
 				}else if($.inArray(st.id,statesArr) !== -1  && ($.inArray(st.id,stateNoTrans) !== -1)){
-					createElement(st.id, 2000, posMiddle,st.items);
+					createElementState(st.id, 2000, posMiddle,st.items);
 					console.log("etat non transition sortantes" + st.id);
 					
 				}else if($.inArray(st.id,statesArr) !== -1  && ($.inArray(st.id,stateNoTrans) === -1)){
-					createElement(st.id, 660, posLeft,st.items);
+					createElementState(st.id, 660, posLeft,st.items);
 					console.log("etat  transition sortantes et entrantes " + st.id);
 				}else if($.inArray(st.id,statesArr) === -1 && ($.inArray(st.id,stateNoTrans) !== -1)){
-					createElement(st.id, 2000, posMiddle),st.items;
+					createElementState(st.id, 2000, posMiddle),st.items;
 					console.log("etat non transition entrantes" + st.id);
 					
 				}
@@ -348,7 +400,7 @@ $(function() {
 			} else {
 				for (var pos in getCookiePosition) {
 					if (st.id == getCookiePosition[pos].element)
-						createElement(st.id, getCookiePosition[pos].left, getCookiePosition[pos].top,st.items);
+						createElementState(st.id, getCookiePosition[pos].left, getCookiePosition[pos].top,st.items);
 				}
 			}
 		})
