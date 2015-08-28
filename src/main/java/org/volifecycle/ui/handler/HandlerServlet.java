@@ -154,7 +154,8 @@ public class HandlerServlet implements Serializable {
 
             state.setId(key);
             state.setDescription(getStateList.getDescription());
-            state.setItems(item.getAllItemsByState(state));
+            if (item != null)
+                state.setItems(item.getAllItemsByState(state));
 
             lifeCycle.setStateListCycle(stateList);
             stateList.add(state);
