@@ -22,6 +22,7 @@ import org.volifecycle.lifecycle.impl.LifeCycleTransitionImpl;
 import org.volifecycle.ui.bean.LifeCycleContainer;
 import org.volifecycle.ui.bean.LifeCycleContainerJson;
 import org.volifecycle.ui.handler.HandlerServlet;
+import org.volifecycle.ui.vo.ItemsByState;
 import org.volifecycle.ui.vo.LifeCycle;
 
 /**
@@ -123,7 +124,9 @@ public class HandlerServletTest<T, A extends LifeCycleAdapter<T>> {
      */
     @Test
     public void getLifeCycleInformationsTest() {
-        lifeCycle = handler.getLifeCycleInformations(manager);
+        ItemsByState items = null;
+
+        lifeCycle = handler.getLifeCycleInformations(manager, items);
 
         assertEquals(1, lifeCycle.getState().get(0).getTransitionMap().size());
         assertEquals("state test", lifeCycle.getState().get(0).getDescription());

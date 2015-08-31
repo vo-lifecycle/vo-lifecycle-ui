@@ -10,66 +10,86 @@ import java.util.Collection;
  *
  */
 public class State implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * sate id.
-	 */
-	private String id;
+    /**
+     * sate id.
+     */
+    private String id;
 
-	/**
-	 * state description.
-	 */
-	private String description;
+    /**
+     * state description.
+     */
+    private String description;
 
-	/**
-	 * state transition list.
-	 */
-	private Collection<Transition> transitionMap;
+    /**
+     * items number.
+     */
+    private Long items;
 
-	/**
-	 * @return the id
-	 */
-	public String getId() {
-		return id;
-	}
+    /**
+     * @return the items
+     */
+    public Long getItems() {
+        return items;
+    }
 
-	/**
-	 * @param id
-	 *            the id to set
-	 */
-	public void setId(String id) {
-		this.id = id;
-	}
+    /**
+     * @param items
+     *            the items to set
+     */
+    public void setItems(Long items) {
+        this.items = items;
+    }
 
-	/**
-	 * @return the description
-	 */
-	public String getDescription() {
-		return description;
-	}
+    /**
+     * state transition list.
+     */
+    private Collection<Transition> transitionMap;
 
-	/**
-	 * @param description
-	 *            the description to set
-	 */
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    /**
+     * @return the id
+     */
+    public String getId() {
+        return id;
+    }
 
-	/**
-	 * @return the transitionList
-	 */
-	public Collection<Transition> getTransitionMap() {
-		return transitionMap;
-	}
+    /**
+     * @param id
+     *            the id to set
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	/**
-	 * @param collection
-	 *            the transitionList to set
-	 */
-	public void setTransitionMap(Collection<Transition> collection) {
-		this.transitionMap = collection;
-	}
+    /**
+     * @return the description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * @param description
+     *            the description to set
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
+     * @return the transitionList
+     */
+    public Collection<Transition> getTransitionMap() {
+        return transitionMap;
+    }
+
+    /**
+     * @param collection
+     *            the transitionList to set
+     */
+    public void setTransitionMap(Collection<Transition> collection) {
+        this.transitionMap = collection;
+    }
 
 }
