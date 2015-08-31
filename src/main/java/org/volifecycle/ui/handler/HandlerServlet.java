@@ -20,6 +20,7 @@ import org.volifecycle.lifecycle.impl.LifeCycleTransitionImpl;
 import org.volifecycle.ui.bean.LifeCycleContainerJson;
 import org.volifecycle.ui.bean.LifeCycleContainerLight;
 import org.volifecycle.ui.vo.Action;
+import org.volifecycle.ui.vo.ItemsByState;
 import org.volifecycle.ui.vo.LifeCycle;
 import org.volifecycle.ui.vo.SimpleAction;
 import org.volifecycle.ui.vo.State;
@@ -128,7 +129,7 @@ public class HandlerServlet implements Serializable {
      * @param manager
      *            .
      */
-    public final LifeCycle getLifeCycleInformations(final LifeCycleManager<?, ?> manager) {
+    public final LifeCycle getLifeCycleInformations(final LifeCycleManager<?, ?> manager, ItemsByState item) {
 
         Map<String, ?> statesById = manager.getStatesById();
         Set<String> keys = statesById.keySet();
@@ -153,6 +154,8 @@ public class HandlerServlet implements Serializable {
 
             state.setId(key);
             state.setDescription(getStateList.getDescription());
+            if (item != null)
+                state.setItems(item.getAllItemsByState(state));
 
             lifeCycle.setStateListCycle(stateList);
             stateList.add(state);
@@ -194,20 +197,11 @@ public class HandlerServlet implements Serializable {
                     state.setTransitionMap(transitionList.values());
                     transition.setIdTransition(infosTransition.getId());
                     transition.setTargetStates(targetStates);
-                    // transition.setActions(simpleAction);
                     transition.setActionsList(listCompositeAction);
 
                 }
             }
 
-            // if (listCompositeAction != null) {
-            // for (Action ca : listCompositeAction) {
-            // System.out.println(ca.getId());
-            // System.out.println(ca.getDescription());
-            //
-            // }
-            // }
-            // System.out.println();
         }
         return lifeCycle;
 
@@ -238,16 +232,12 @@ public class HandlerServlet implements Serializable {
                     if (null != composite.getActions()) {
                         for (LifeCycleAction<?> actionc : composite.getActions()) {
                             SimpleAction actionS = new SimpleAction();
-
-                            // System.out.println(actionc.getId());
-
                             actionS.setId(actionc.getId());
                             actionS.setDescription(actionc.getDescription());
                             listofActionComposite.add(actionS);
 
                         }
                         cAction.setActions(listofActionComposite);
-
                     }
                     if (cAction != null)
                         listCompositeAction.add(cAction);

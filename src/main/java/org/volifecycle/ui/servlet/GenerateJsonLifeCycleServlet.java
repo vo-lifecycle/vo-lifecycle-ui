@@ -2,8 +2,9 @@ package org.volifecycle.ui.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -19,6 +20,7 @@ import org.volifecycle.lifecycle.LifeCycleManager;
 import org.volifecycle.ui.bean.LifeCycleContainer;
 import org.volifecycle.ui.bean.LifeCycleContainerJson;
 import org.volifecycle.ui.handler.HandlerServlet;
+import org.volifecycle.ui.vo.ItemsByState;
 import org.volifecycle.ui.vo.LifeCycle;
 
 /**
@@ -28,75 +30,83 @@ import org.volifecycle.ui.vo.LifeCycle;
  *
  */
 public class GenerateJsonLifeCycleServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public GenerateJsonLifeCycleServlet() {
-		super();
-	}
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public GenerateJsonLifeCycleServlet() {
+        super();
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected final void doGet(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
-		generateJSON(req, resp);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected final void doGet(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
+        generateJSON(req, resp);
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected final void doPost(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
-		generateJSON(req, resp);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected final void doPost(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
+        generateJSON(req, resp);
+    }
 
-	/**
-	 * Generation of JSON content.
-	 * 
-	 * @param req
-	 * @param resp
-	 * @throws IOException
-	 * @throws JsonGenerationException
-	 * @throws JsonMappingException
-	 */
-	private void generateJSON(final HttpServletRequest req, final HttpServletResponse resp) throws IOException, JsonGenerationException, JsonMappingException {
-		HandlerServlet handler = new HandlerServlet();
-		ObjectMapper mapper = new ObjectMapper();
-		LifeCycle lifeCycle = new LifeCycle();
-		LifeCycleContainerJson lifeCycleManagerListToJson = new LifeCycleContainerJson();
-		List<LifeCycleManager<?, ?>> lifecycleManagerList = new ArrayList<LifeCycleManager<?, ?>>();
+    /**
+     * Generation of JSON content.
+     * 
+     * @param req
+     * @param resp
+     * @throws IOException
+     * @throws JsonGenerationException
+     * @throws JsonMappingException
+     */
+    private void generateJSON(final HttpServletRequest req, final HttpServletResponse resp) throws IOException, JsonGenerationException, JsonMappingException {
 
-		resp.setContentType("application/json");
-		PrintWriter out = resp.getWriter();
+        HandlerServlet handler = new HandlerServlet();
+        ObjectMapper mapper = new ObjectMapper();
+        LifeCycle lifeCycle = new LifeCycle();
 
-		// Load spring context
-		ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
-		LifeCycleContainer managerContainerList = ((LifeCycleContainer) context.getBean("lifecycleContainer"));
-		lifecycleManagerList = managerContainerList.getManagerList();
+        ItemsByState items = null;
 
-		handler.init();
+        resp.setContentType("application/json");
+        PrintWriter out = resp.getWriter();
 
-		// Get list of all managers from a manager container xml file
-		lifeCycleManagerListToJson = handler.getManagerListAttrs(lifecycleManagerList);
+        // Load spring context
+        ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+        LifeCycleContainer managerContainer = ((LifeCycleContainer) context.getBean("lifecycleContainer"));
+        List<LifeCycleManager<?, ?>> lifecycleManagerList = managerContainer.getManagerList();
+        Map<String, ?> mapStatByLifeCycleId = managerContainer.getMapStatByLifeCycleId();
 
-		// display list of all manager in a json format on the browser
-		if (req.getParameter("action") != null) {
-			if (req.getParameter("action").equals("showList")) {
-				out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(lifeCycleManagerListToJson));
-			}
-		}
+        handler.init();
 
-		// display lifecycle content in json format on the browser
-		if (req.getParameter("idManagerLifeCycle") != null) {
-			int idManagerLifeCycle = Integer.parseInt(req.getParameter("idManagerLifeCycle"));
-			if (idManagerLifeCycle >= 0 && idManagerLifeCycle <= lifecycleManagerList.size()) {
-				lifeCycle = handler.getLifeCycleInformations(lifecycleManagerList.get(idManagerLifeCycle));
-				out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(lifeCycle));
-			}
-		}
-	}
+        // Get list of all managers from a manager container xml file
+        LifeCycleContainerJson lifeCycleManagerListToJson = handler.getManagerListAttrs(lifecycleManagerList);
+
+        // display list of all manager in a json format on the browser
+        if (req.getParameter("action") != null) {
+            if (req.getParameter("action").equals("showList")) {
+                out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(lifeCycleManagerListToJson));
+            }
+        }
+
+        // display lifecycle content in json format on the browser
+        if (req.getParameter("idManagerLifeCycle") != null) {
+            int idManagerLifeCycle = Integer.parseInt(req.getParameter("idManagerLifeCycle"));
+            if (idManagerLifeCycle >= 0 && idManagerLifeCycle <= lifecycleManagerList.size()) {
+                for (Entry<String, ?> entry : mapStatByLifeCycleId.entrySet()) {
+                    if (entry.getKey().equals(lifecycleManagerList.get(idManagerLifeCycle).getId())) {
+                        items = (ItemsByState) context.getBean(entry.getValue().toString());
+                    }
+                }
+
+                lifeCycle = handler.getLifeCycleInformations(lifecycleManagerList.get(idManagerLifeCycle), items);
+                out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(lifeCycle));
+            }
+        }
+    }
 
 }
