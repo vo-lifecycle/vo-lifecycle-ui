@@ -97,9 +97,11 @@ public class GenerateJsonLifeCycleServlet extends HttpServlet {
         if (req.getParameter("idManagerLifeCycle") != null) {
             int idManagerLifeCycle = Integer.parseInt(req.getParameter("idManagerLifeCycle"));
             if (idManagerLifeCycle >= 0 && idManagerLifeCycle <= lifecycleManagerList.size()) {
-                for (Entry<String, ?> entry : mapStatByLifeCycleId.entrySet()) {
-                    if (entry.getKey().equals(lifecycleManagerList.get(idManagerLifeCycle).getId())) {
-                        items = (ItemsByState) context.getBean(entry.getValue().toString());
+                if (mapStatByLifeCycleId != null) {
+                    for (Entry<String, ?> entry : mapStatByLifeCycleId.entrySet()) {
+                        if (entry.getKey().equals(lifecycleManagerList.get(idManagerLifeCycle).getId())) {
+                            items = (ItemsByState) context.getBean(entry.getValue().toString());
+                        }
                     }
                 }
 
