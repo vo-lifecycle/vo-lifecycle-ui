@@ -299,8 +299,13 @@ $(function() {
 	 *  
 	 */
 	function createElementState(id,x,y,items) {
-		var html = '<button class="delete btn btn-success" type="button" data-toggle="collapse" data-target="#collapse' + id + '" aria-expanded="false"        aria-,' + 'controls="collapseExample">'+ items +'</button>' + '<a href="#" class="btn btn-success btn-lg" style="min-width:150px;"><label>' + id  + '</label>'
-
+		var html 
+		if(items != null){
+			html = '<button class="delete btn btn-success" type="button" data-toggle="collapse" data-target="#collapse' + id + '" aria-expanded="false"        aria-,' + 'controls="collapseExample">'+ items +'</button>' + '<a href="#" class="btn btn-success btn-lg" style="min-width:150px;"><label>' + id  + '</label>'
+		}else{
+			html = '<button class="delete btn btn-success" type="button" data-toggle="collapse" data-target="#collapse' + id + '" aria-expanded="false"        aria-,' + 'controls="collapseExample"></button>' + '<a href="#" class="btn btn-success btn-lg" style="min-width:150px;"><label>' + id  + '</label>'
+	
+		}
 		+'</a>' + '<div id= "collapse' + id + '" class="collapse blue" aria-expanded="false" style="background-color: white; width:300px;">'
 		 + '<text></text>' + '<span></span><br/>' + '</div>';
 		var state = new joint.shapes.html.ElementState({
