@@ -176,12 +176,8 @@
             <artifactId>jetty-servlet-tester</artifactId>
             <version>7.0.0.M2</version>
         </dependency>
-
-
-
-
-
     </dependencies>
+    
     <build>
         <plugins>
             <plugin>
