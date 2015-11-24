@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>vo-lifecycle</groupId>
     <artifactId>vo-lifecycle-ui</artifactId>
-    <version>1.0.7</version>
+    <version>1.0.8</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -10,11 +10,8 @@
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
 
-        <!-- Log4j -->
-        <log4j.version>2.2</log4j.version>
-
         <!-- VO lifecycle core -->
-        <vo-lifecycle.version>2.0.8</vo-lifecycle.version>
+        <vo-lifecycle.version>2.0.9</vo-lifecycle.version>
 
         <!-- json -->
         <jackson.version>2.4.4</jackson.version>
@@ -58,13 +55,6 @@
             <artifactId>javax.servlet-api</artifactId>
             <version>${servletapi.version}</version>
             <scope>provided</scope>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
-            <optional>true</optional>
-            <version>${log4j.version}</version>
         </dependency>
 
         <!-- apache commons -->
