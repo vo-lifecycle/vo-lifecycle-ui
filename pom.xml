@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>vo-lifecycle</groupId>
     <artifactId>vo-lifecycle-ui</artifactId>
-    <version>1.0.8</version>
+    <version>1.0.9</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -11,7 +11,7 @@
         <maven.compiler.target>1.7</maven.compiler.target>
 
         <!-- VO lifecycle core -->
-        <vo-lifecycle.version>2.0.9</vo-lifecycle.version>
+        <vo-lifecycle.version>2.1.7</vo-lifecycle.version>
 
         <!-- json -->
         <jackson.version>2.4.4</jackson.version>
@@ -30,7 +30,7 @@
         <junit.version>4.11</junit.version>
 
         <!-- Maven plugins -->
-        <jacoco-maven-plugin.version>0.7.4.201502262128</jacoco-maven-plugin.version>
+        <jacoco-maven-plugin.version>0.7.7.201606060606</jacoco-maven-plugin.version>
         <sql-maven-plugin.version>1.5</sql-maven-plugin.version>
         <jetty-maven-plugin.version>8.1.4.v20120524</jetty-maven-plugin.version>
         <tomcat7-maven-plugin.version>2.2</tomcat7-maven-plugin.version>
