@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.dozer.DozerBeanMapper;
-import org.dozer.Mapper;
 import org.volifecycle.lifecycle.LifeCycleAction;
 import org.volifecycle.lifecycle.LifeCycleManager;
 import org.volifecycle.lifecycle.LifeCycleState;
@@ -25,6 +23,7 @@ import org.volifecycle.ui.vo.LifeCycle;
 import org.volifecycle.ui.vo.SimpleAction;
 import org.volifecycle.ui.vo.State;
 import org.volifecycle.ui.vo.Transition;
+import org.volifecycle.utils.BeanMapperFactory;
 
 /**
  * @author anthony attia <anthony.attia1@gmail.com>
@@ -32,227 +31,228 @@ import org.volifecycle.ui.vo.Transition;
  */
 public class HandlerServlet implements Serializable {
 
-    /**
-     * default servialVersionUID.
-     */
-    private static final long serialVersionUID = 1L;
+	/**
+	 * default servialVersionUID.
+	 */
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * declare a new sate.
-     */
-    private State state;
+	/**
+	 * declare a new sate.
+	 */
+	private State state;
 
-    /**
-     * declare a new sateList.
-     */
-    private List<State> stateList;
+	/**
+	 * declare a new sateList.
+	 */
+	private List<State> stateList;
 
-    /**
-     * declare a new checkList.
-     */
-    private List<String> targetStates;
+	/**
+	 * declare a new checkList.
+	 */
+	private List<String> targetStates;
 
-    /**
-     * declare a new transitionList.
-     */
-    private Map<String, Transition> transitionList;
+	/**
+	 * declare a new transitionList.
+	 */
+	private Map<String, Transition> transitionList;
 
-    /**
-     * 
-     */
-    private LifeCycle lifeCycle;
+	/**
+	 * 
+	 */
+	private LifeCycle lifeCycle;
 
-    /**
-     * declare a new transition.
-     */
-    private Transition transition;
+	/**
+	 * declare a new transition.
+	 */
+	private Transition transition;
 
-    /**
-     * declare list of managers.
-     */
+	/**
+	 * declare list of managers.
+	 */
 
-    private LifeCycleContainerJson listManager;
+	private LifeCycleContainerJson listManager;
 
-    /**
-     * declare list of simpleAction.
-     */
-    private List<SimpleAction> simpleAction;
+	/**
+	 * declare list of simpleAction.
+	 */
+	private List<SimpleAction> simpleAction;
 
-    /**
-     * 
-     * declare list of compositeAction.
-     */
-    private List<Action> listCompositeAction;
+	/**
+	 * 
+	 * declare list of compositeAction.
+	 */
+	private List<Action> listCompositeAction;
 
-    /**
-     * declare datas.
-     */
-    public final void init() {
+	/**
+	 * declare datas.
+	 */
+	public final void init() {
 
-        transitionList = new HashMap<String, Transition>();
+		transitionList = new HashMap<String, Transition>();
 
-    }
+	}
 
-    List<SimpleAction> listofActionComposite;
+	List<SimpleAction> listofActionComposite;
 
-    /**
-     * Return the list of all life cycles managers
-     * 
-     * @param lifecycleManagerList
-     * @return
-     */
-    public final LifeCycleContainerJson getManagerListAttrs(final List<LifeCycleManager<?, ?>> lifecycleManagerList) {
-        Mapper mapper = new DozerBeanMapper();
+	/**
+	 * Return the list of all life cycles managers
+	 * 
+	 * @param lifecycleManagerList
+	 * @return
+	 */
+	public final LifeCycleContainerJson getManagerListAttrs(final List<LifeCycleManager<?, ?>> lifecycleManagerList) {
+		BeanMapperFactory mapper = BeanMapperFactory.getInstance();
 
-        listManager = new LifeCycleContainerJson();
+		listManager = new LifeCycleContainerJson();
 
-        LifeCycleContainerLight lifeCycleLight = null;
-        List<LifeCycleContainerLight> containerManagerList = new ArrayList<LifeCycleContainerLight>();
+		LifeCycleContainerLight lifeCycleLight = null;
+		List<LifeCycleContainerLight> containerManagerList = new ArrayList<LifeCycleContainerLight>();
 
-        for (LifeCycleManager<?, ?> manager : lifecycleManagerList) {
-            lifeCycleLight = mapper.map(manager, LifeCycleContainerLight.class);
-            containerManagerList.add(lifeCycleLight);
+		for (LifeCycleManager<?, ?> manager : lifecycleManagerList) {
+			lifeCycleLight = mapper.map(manager, LifeCycleContainerLight.class);
+			containerManagerList.add(lifeCycleLight);
 
-        }
+		}
 
-        listManager.setList(containerManagerList);
+		listManager.setList(containerManagerList);
 
-        return listManager;
-    }
+		return listManager;
+	}
 
-    /**
-     * 
-     * Take a manager of a lifecycle and return an object which contains all
-     * datas about a vo lifecycle graph , including each actions for each
-     * transitions and each transition for each actions.
-     * 
-     * @param manager
-     *            .
-     */
-    public final LifeCycle getLifeCycleInformations(final LifeCycleManager<?, ?> manager, ItemsByState item) {
+	/**
+	 * 
+	 * Take a manager of a lifecycle and return an object which contains all
+	 * datas about a vo lifecycle graph , including each actions for each
+	 * transitions and each transition for each actions.
+	 * 
+	 * @param manager
+	 *            .
+	 */
+	public final LifeCycle getLifeCycleInformations(final LifeCycleManager<?, ?> manager, ItemsByState item) {
 
-        Map<String, ?> statesById = manager.getStatesById();
-        Set<String> keys = statesById.keySet();
+		Map<String, ?> statesById = manager.getStatesById();
+		Set<String> keys = statesById.keySet();
 
-        Iterator<String> it = keys.iterator();
+		Iterator<String> it = keys.iterator();
 
-        Iterator<String> itTransition = null;
-        Map<String, ?> transitionsById = null;
-        LifeCycleTransitionImpl<?> infosTransition = null;
+		Iterator<String> itTransition = null;
+		Map<String, ?> transitionsById = null;
+		LifeCycleTransitionImpl<?> infosTransition = null;
 
-        String key;
-        stateList = new ArrayList<State>();
-        lifeCycle = new LifeCycle();
+		String key;
+		stateList = new ArrayList<State>();
+		lifeCycle = new LifeCycle();
 
-        while (it.hasNext()) {
-            state = new State();
-            transitionList = new HashMap<String, Transition>();
+		while (it.hasNext()) {
+			state = new State();
+			transitionList = new HashMap<String, Transition>();
 
-            key = it.next();
-            LifeCycleState<?> getStateList = (LifeCycleState<?>) statesById.get(key);
-            transitionsById = getStateList.getTransitionsById();
+			key = it.next();
+			LifeCycleState<?> getStateList = (LifeCycleState<?>) statesById.get(key);
+			transitionsById = getStateList.getTransitionsById();
 
-            state.setId(key);
-            state.setDescription(getStateList.getDescription());
-            if (item != null)
-                state.setItems(item.getAllItemsByState(state));
+			state.setId(key);
+			state.setDescription(getStateList.getDescription());
+			if (item != null)
+				state.setItems(item.getAllItemsByState(state));
 
-            lifeCycle.setStateListCycle(stateList);
-            stateList.add(state);
+			lifeCycle.setStateListCycle(stateList);
+			stateList.add(state);
 
-            Set<String> keysTransition = (null == getStateList.getTransitionsById()) ? null : getStateList.getTransitionsById().keySet();
-            if (isEmpty(keysTransition)) {
-                continue;
-            }
+			Set<String> keysTransition = (null == getStateList.getTransitionsById()) ? null
+					: getStateList.getTransitionsById().keySet();
+			if (isEmpty(keysTransition)) {
+				continue;
+			}
 
-            itTransition = keysTransition.iterator();
-            while (itTransition.hasNext()) {
+			itTransition = keysTransition.iterator();
+			while (itTransition.hasNext()) {
 
-                key = itTransition.next();
-                if (getStateList.getTransitionsById() != null) {
+				key = itTransition.next();
+				if (getStateList.getTransitionsById() != null) {
 
-                    transition = new Transition();
-                    infosTransition = (LifeCycleTransitionImpl<?>) transitionsById.get(key);
-                    targetStates = new ArrayList<String>();
-                    simpleAction = new ArrayList<SimpleAction>();
+					transition = new Transition();
+					infosTransition = (LifeCycleTransitionImpl<?>) transitionsById.get(key);
+					targetStates = new ArrayList<String>();
+					simpleAction = new ArrayList<SimpleAction>();
 
-                    if (null != infosTransition.getTargetStates()) {
-                        for (String targetStatesL : infosTransition.getTargetStates()) {
-                            if (targetStatesL != null) {
-                                targetStates.add(targetStatesL);
-                            }
+					if (null != infosTransition.getTargetStates()) {
+						for (String targetStatesL : infosTransition.getTargetStates()) {
+							if (targetStatesL != null) {
+								targetStates.add(targetStatesL);
+							}
 
-                        }
-                    }
+						}
+					}
 
-                    listCompositeAction = new ArrayList<Action>();
+					listCompositeAction = new ArrayList<Action>();
 
-                    listCompositeAction = getListAction(infosTransition);
+					listCompositeAction = getListAction(infosTransition);
 
-                    transition.setType(infosTransition.getType());
-                    transition.setdescription(infosTransition.getDescription());
+					transition.setType(infosTransition.getType());
+					transition.setdescription(infosTransition.getDescription());
 
-                    transitionList.put(key, transition);
+					transitionList.put(key, transition);
 
-                    state.setTransitionMap(transitionList.values());
-                    transition.setIdTransition(infosTransition.getId());
-                    transition.setTargetStates(targetStates);
-                    transition.setActionsList(listCompositeAction);
+					state.setTransitionMap(transitionList.values());
+					transition.setIdTransition(infosTransition.getId());
+					transition.setTargetStates(targetStates);
+					transition.setActionsList(listCompositeAction);
 
-                }
-            }
+				}
+			}
 
-        }
-        return lifeCycle;
+		}
+		return lifeCycle;
 
-    }
+	}
 
-    /**
-     * return the list of all actions of a transitions, whatever composite
-     * action or simple.
-     * 
-     * @param transitionActions
-     * @return
-     */
+	/**
+	 * return the list of all actions of a transitions, whatever composite
+	 * action or simple.
+	 * 
+	 * @param transitionActions
+	 * @return
+	 */
 
-    public List<Action> getListAction(final LifeCycleTransitionImpl<?> transition) {
+	public List<Action> getListAction(final LifeCycleTransitionImpl<?> transition) {
 
-        if (null != transition.getActions()) {
-            for (LifeCycleAction<?> action : transition.getActions()) {
-                Action cAction = new Action();
-                if (action instanceof LifeCycleCompositeActionImpl<?>) {
+		if (null != transition.getActions()) {
+			for (LifeCycleAction<?> action : transition.getActions()) {
+				Action cAction = new Action();
+				if (action instanceof LifeCycleCompositeActionImpl<?>) {
 
-                    LifeCycleCompositeActionImpl<?> composite = (LifeCycleCompositeActionImpl<?>) action;
+					LifeCycleCompositeActionImpl<?> composite = (LifeCycleCompositeActionImpl<?>) action;
 
-                    cAction.setId(composite.getId());
-                    cAction.setDescription(composite.getDescription());
+					cAction.setId(composite.getId());
+					cAction.setDescription(composite.getDescription());
 
-                    listofActionComposite = new ArrayList<SimpleAction>();
+					listofActionComposite = new ArrayList<SimpleAction>();
 
-                    if (null != composite.getActions()) {
-                        for (LifeCycleAction<?> actionc : composite.getActions()) {
-                            SimpleAction actionS = new SimpleAction();
-                            actionS.setId(actionc.getId());
-                            actionS.setDescription(actionc.getDescription());
-                            listofActionComposite.add(actionS);
+					if (null != composite.getActions()) {
+						for (LifeCycleAction<?> actionc : composite.getActions()) {
+							SimpleAction actionS = new SimpleAction();
+							actionS.setId(actionc.getId());
+							actionS.setDescription(actionc.getDescription());
+							listofActionComposite.add(actionS);
 
-                        }
-                        cAction.setActions(listofActionComposite);
-                    }
-                    if (cAction != null)
-                        listCompositeAction.add(cAction);
+						}
+						cAction.setActions(listofActionComposite);
+					}
+					if (cAction != null)
+						listCompositeAction.add(cAction);
 
-                } else {
+				} else {
 
-                    cAction.setId(action.getId());
-                    cAction.setDescription(action.getDescription());
+					cAction.setId(action.getId());
+					cAction.setDescription(action.getDescription());
 
-                    if (action != null) {
-                        listCompositeAction.add(cAction);
-                    }
-                }
-            }
-        }
-        return listCompositeAction;
-    }
+					if (action != null) {
+						listCompositeAction.add(cAction);
+					}
+				}
+			}
+		}
+		return listCompositeAction;
+	}
 }
