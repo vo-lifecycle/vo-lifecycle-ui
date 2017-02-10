@@ -3,6 +3,12 @@
  * @author anthony attia <anthony.attia1@gmail.com>
  *
  */
+
+// Patch for Chrome :: https://www.jointjs.com/blog/announcement-gettransformtoelement-polyfill
+SVGElement.prototype.getTransformToElement = SVGElement.prototype.getTransformToElement || function(elem) {
+    return elem.getScreenCTM().inverse().multiply(this.getScreenCTM());
+};
+
 $(function() {
 
 	//Get Json format lifecycle datas from an other servlet  
